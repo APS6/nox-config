@@ -4,3 +4,9 @@
 2026/01/04-16:06:21.964 31e0 Level-0 table #83: started
 2026/01/04-16:06:21.993 31e0 Level-0 table #83: 2632457 bytes OK
 2026/01/04-16:06:21.995 31e0 Delete type=0 #78
+2026/01/04-16:18:52.060 31e0 Compacting 1@1 + 1@2 files
+2026/01/04-16:18:52.067 31e0 Generated table #84@1: 1040 keys, 50089 bytes
+2026/01/04-16:18:52.067 31e0 Compacted 1@1 + 1@2 files => 50089 bytes
+2026/01/04-16:18:52.068 31e0 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/01/04-16:18:52.068 31e0 Delete type=2 #80
+2026/01/04-16:18:52.068 31e0 Delete type=2 #83

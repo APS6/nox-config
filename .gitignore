@@ -1,0 +1,14 @@
+BraveSoftware
+
+# Theme-switcher managed files
+ghostty/config
+walker/themes/default/style.css
+waybar/style.css
+swayosd/style.css
+mako/config
+btop/themes/current.theme
+btop/btop.conf
+gtklock/style.css
+gtklock/config.ini
+niri/config.kdl
+zed/settings.json

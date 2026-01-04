@@ -45,6 +45,7 @@ binds {
     MOD+RETURN                          hotkey-overlay-title="Open Terminal: ghostty" { spawn "ghostty"; }
     MOD+SPACE                           hotkey-overlay-title="Open App Launcher: walker" { spawn "walker"; }
     MOD+C                               hotkey-overlay-title="Open Clipboard: walker" { spawn "walker" "--provider" "clipboard"; }
+    MOD+SHIFT+T                         hotkey-overlay-title="Theme Picker" { spawn-sh "~/.config/themes/theme-picker.sh"; }
     MOD+B                               hotkey-overlay-title="Open Browser: zen" { spawn "zen-browser"; }
     MOD+Z                               hotkey-overlay-title="Open Editor: zed" { spawn "zeditor"; }
     MOD+T                               hotkey-overlay-title="Open System Monitor: btop" { spawn "ghostty" "-e" "btop"; }
@@ -201,8 +202,8 @@ binds {
 
         focus-ring {
             width 3
-            active-color "#00ac89"
-            inactive-color "#505050"
+            active-color "#a7c080"
+            inactive-color "#475258"
         }
 
         shadow {
