@@ -1,6 +1,7 @@
 BraveSoftware
 
 # Theme-switcher managed files
+# NOTE: Do not edit these files directly. Instead, edit the corresponding templates in ~/.config/themes/templates/
 ghostty/config
 walker/themes/default/style.css
 waybar/style.css
@@ -12,3 +13,6 @@ gtklock/style.css
 gtklock/config.ini
 niri/config.kdl
 zed/settings.json
+
+# GitHub Copilot (contains secrets)
+github-copilot/
