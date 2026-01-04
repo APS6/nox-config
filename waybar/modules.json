@@ -1,4 +1,29 @@
 {
+  "group/left-workspaces": {
+    "orientation": "horizontal",
+    "modules": ["niri/workspaces"]
+  },
+
+  "group/left-mpris": {
+    "orientation": "horizontal",
+    "modules": ["mpris"]
+  },
+
+  "group/center-clock": {
+    "orientation": "horizontal",
+    "modules": ["clock"]
+  },
+
+  "group/right-stats": {
+    "orientation": "horizontal",
+    "modules": ["cpu", "memory", "custom/gpu", "network#stats"]
+  },
+
+  "group/right-system": {
+    "orientation": "horizontal",
+    "modules": ["tray", "bluetooth", "pulseaudio", "battery"]
+  },
+
   "niri/workspaces": {
     "on-click": "activate",
     "format": "{icon}",
@@ -53,12 +78,12 @@
 
   "network": {
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
-    "format": "{icon}",
-    "format-wifi": "{icon}",
-    "format-ethernet": "󰀂",
+    "format": "{icon} ⇣{bandwidthDownBytes} ⇡{bandwidthUpBytes}",
+    "format-wifi": "{icon} ⇣{bandwidthDownBytes} ⇡{bandwidthUpBytes}",
+    "format-ethernet": "󰀂 ⇣{bandwidthDownBytes} ⇡{bandwidthUpBytes}",
     "format-disconnected": "󰤮",
-    "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
-    "tooltip-format-ethernet": "{ifname}\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+    "tooltip-format-wifi": "{essid} ({frequency} GHz)\nSignal: {signalStrength}%",
+    "tooltip-format-ethernet": "{ifname}",
     "tooltip-format-disconnected": "Disconnected",
     "interval": 3,
     "on-click": "ghostty -e nmtui"
@@ -93,5 +118,33 @@
   "tray": {
     "icon-size": 14,
     "spacing": 12
+  },
+
+  "cpu": {
+    "format": "\uf4bc {usage}%",
+    "tooltip-format": "CPU: {usage}%\n{avg_frequency} GHz",
+    "interval": 3,
+    "on-click": "ghostty -e btop"
+  },
+
+  "memory": {
+    "format": "󰘚 {percentage}%",
+    "tooltip-format": "RAM: {used:0.1f}G / {total:0.1f}G",
+    "interval": 3,
+    "on-click": "ghostty -e btop"
+  },
+
+  "custom/gpu": {
+    "exec": "cat /sys/class/drm/card1/device/gpu_busy_percent 2>/dev/null || echo 0",
+    "format": "󰾲 {}%",
+    "interval": 3,
+    "tooltip": false,
+    "on-click": "ghostty -e btop"
+  },
+
+  "network#stats": {
+    "format": "⇣{bandwidthDownBytes} ⇡{bandwidthUpBytes}",
+    "interval": 3,
+    "tooltip": false
   }
 }

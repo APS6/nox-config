@@ -11,7 +11,7 @@
 
   "include": ["~/.config/waybar/modules.json"],
 
-  "modules-left": ["niri/workspaces", "mpris"],
-  "modules-center": ["clock"],
-  "modules-right": ["tray", "bluetooth", "network", "pulseaudio", "battery"]
+  "modules-left": ["group/left-workspaces", "mpris"],
+  "modules-center": ["group/center-clock"],
+  "modules-right": ["group/right-stats", "group/right-system"]
 }
