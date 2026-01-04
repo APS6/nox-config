@@ -1,0 +1,189 @@
+/* Walker theme - clean minimal dark */
+
+@define-color bg #0f1117;
+@define-color bg_light #1e222a;
+@define-color bg_lighter #2a2e38;
+@define-color fg #e0e0e0;
+@define-color fg_dim #808080;
+@define-color accent #00ac89;
+@define-color urgent #c34043;
+
+* {
+  all: unset;
+  font-family: "JetBrains Mono Nerd Font", monospace;
+  font-size: 14px;
+}
+
+scrollbar {
+  opacity: 0;
+}
+
+.box-wrapper {
+  background: @bg;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid @bg_lighter;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.preview-box,
+.elephant-hint,
+.placeholder {
+  color: @fg_dim;
+}
+
+.search-container {
+  margin-bottom: 8px;
+}
+
+.input {
+  background: @bg_light;
+  padding: 12px 16px;
+  color: @fg;
+  caret-color: @accent;
+  border-radius: 4px;
+  border: 1px solid @bg_lighter;
+}
+
+.input:focus {
+  border-color: @accent;
+}
+
+.input placeholder {
+  color: @fg_dim;
+}
+
+.input selection {
+  background: @bg_lighter;
+}
+
+.list {
+  color: @fg;
+}
+
+.item-box {
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin: 2px 0;
+}
+
+child:selected .item-box {
+  background: @bg_light;
+  border-left: 2px solid @accent;
+}
+
+.item-quick-activation {
+  background: @bg_lighter;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: @fg_dim;
+}
+
+.item-text {
+  color: @fg;
+}
+
+.item-subtext {
+  font-size: 12px;
+  color: @fg_dim;
+  margin-top: 2px;
+}
+
+.item-image {
+  margin-right: 12px;
+}
+
+.normal-icons {
+  -gtk-icon-size: 20px;
+}
+
+.large-icons {
+  -gtk-icon-size: 32px;
+}
+
+.preview {
+  background: @bg_light;
+  border: 1px solid @bg_lighter;
+  border-radius: 4px;
+  padding: 12px;
+  color: @fg;
+  margin-left: 8px;
+}
+
+.preview .large-icons {
+  -gtk-icon-size: 48px;
+}
+
+/* Calculator */
+.calc .item-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: @accent;
+}
+
+.calc .item-subtext {
+  font-size: 14px;
+}
+
+/* Symbols */
+.symbols .item-image {
+  font-size: 20px;
+}
+
+/* Clipboard */
+.clipboard .item-subtext {
+  font-family: "JetBrains Mono Nerd Font", monospace;
+  font-size: 11px;
+}
+
+/* Keybinds hints */
+.keybinds {
+  padding-top: 8px;
+  margin-top: 8px;
+  border-top: 1px solid @bg_lighter;
+  font-size: 11px;
+  color: @fg_dim;
+}
+
+.keybind-button {
+  opacity: 0.6;
+}
+
+.keybind-button:hover {
+  opacity: 1;
+}
+
+.keybind-label {
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid @fg_dim;
+  font-size: 10px;
+}
+
+.keybind-bind {
+  opacity: 0.4;
+  text-transform: lowercase;
+}
+
+/* Error state */
+.error {
+  padding: 12px;
+  background: @urgent;
+  color: @fg;
+  border-radius: 4px;
+}
+
+/* Provider list */
+.providerlist .item-subtext {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* Popover menus */
+popover {
+  background: @bg_light;
+  border: 1px solid @bg_lighter;
+  border-radius: 6px;
+  padding: 8px;
+}

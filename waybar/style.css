@@ -1,0 +1,146 @@
+/* Nord color palette */
+@define-color bg #2e3440;
+@define-color bg-light #3b4252;
+@define-color fg #d8dee9;
+@define-color fg-dim #4c566a;
+@define-color frost #88c0d0;
+@define-color green #a3be8c;
+@define-color yellow #ebcb8b;
+@define-color red #bf616a;
+
+* {
+    color: @fg;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 13px;
+}
+
+window#waybar {
+    background-color: @bg;
+    border-radius: 6px;
+}
+
+.modules-left {
+    margin-left: 8px;
+}
+
+.modules-right {
+    margin-right: 8px;
+}
+
+/* Workspaces */
+#workspaces button {
+    all: initial;
+    color: @fg-dim;
+    padding: 0 6px;
+    margin: 0 2px;
+    min-width: 10px;
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 13px;
+}
+
+#workspaces button.active {
+    color: @frost;
+}
+
+#workspaces button.empty {
+    opacity: 0.5;
+}
+
+#workspaces button:hover {
+    color: @fg;
+}
+
+/* Clock */
+#clock {
+    color: @fg;
+    font-weight: 500;
+    margin: 0 8px;
+}
+
+/* Music/MPRIS */
+#mpris {
+    color: @fg;
+    margin: 0 8px;
+}
+
+#mpris.paused {
+    color: @fg-dim;
+}
+
+#mpris.stopped {
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+}
+
+/* Right side modules - all same base color */
+#bluetooth,
+#network,
+#battery,
+#pulseaudio {
+    color: @fg;
+    margin: 0 8px;
+}
+
+/* Bluetooth - dim when off */
+#bluetooth.disabled,
+#bluetooth.off {
+    color: @fg-dim;
+}
+
+/* Network - dim when disconnected */
+#network.disconnected {
+    color: @fg-dim;
+}
+
+/* Battery states - always white */
+#battery.charging,
+#battery.plugged {
+    color: @fg;
+}
+
+#battery.warning:not(.charging) {
+    color: @yellow;
+}
+
+#battery.critical:not(.charging) {
+    color: @red;
+    animation: blink 1s ease-in-out infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.5; }
+}
+
+/* Pulseaudio - dim when muted */
+#pulseaudio.muted {
+    color: @fg-dim;
+}
+
+/* System tray */
+#tray {
+    margin-right: 12px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+}
+
+/* Tooltips */
+tooltip {
+    background: @bg-light;
+    border: 1px solid @fg-dim;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+tooltip label {
+    color: @fg;
+}

@@ -1,0 +1,12 @@
+2026/01/04-15:52:02.643 2569 Reusing MANIFEST /home/aps/.config/BraveSoftware/Brave-Browser/Default/IndexedDB/https_music.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/01/04-15:52:02.643 2569 Recovering log #74
+2026/01/04-15:52:02.647 2569 Reusing old log /home/aps/.config/BraveSoftware/Brave-Browser/Default/IndexedDB/https_music.youtube.com_0.indexeddb.leveldb/000074.log 
+2026/01/04-15:56:14.214 2557 Level-0 table #79: started
+2026/01/04-15:56:14.223 2557 Level-0 table #79: 1636792 bytes OK
+2026/01/04-15:56:14.225 2557 Delete type=0 #74
+2026/01/04-15:57:37.033 2553 Compacting 1@1 + 1@2 files
+2026/01/04-15:57:37.038 2553 Generated table #80@1: 837 keys, 96535 bytes
+2026/01/04-15:57:37.038 2553 Compacted 1@1 + 1@2 files => 96535 bytes
+2026/01/04-15:57:37.039 2553 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/01/04-15:57:37.039 2553 Delete type=2 #76
+2026/01/04-15:57:37.039 2553 Delete type=2 #79

@@ -1,0 +1,17 @@
+{
+  "reload_style_on_change": true,
+  "layer": "top",
+  "position": "top",
+  "spacing": 0,
+  "height": 28,
+  "margin-top": 6,
+  "margin-bottom": 0,
+  "margin-left": 10,
+  "margin-right": 10,
+
+  "include": ["~/.config/waybar/modules.json"],
+
+  "modules-left": ["niri/workspaces", "mpris"],
+  "modules-center": ["clock"],
+  "modules-right": ["tray", "bluetooth", "network", "pulseaudio", "battery"]
+}
