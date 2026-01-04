@@ -157,11 +157,12 @@ fi
 success "gtklock"
 
 # ─────────────────────────────────────────────────────────────
-# NIRI (focus ring colors)
+# NIRI (focus ring colors + overview backdrop)
 # ─────────────────────────────────────────────────────────────
 info "Applying Niri theme..."
 sed -i "s/active-color \"#[a-fA-F0-9]\{6\}\"/active-color \"$accent\"/" "$HOME/.config/niri/config.kdl"
 sed -i "s/inactive-color \"#[a-fA-F0-9]\{6\}\"/inactive-color \"$bg_lighter\"/" "$HOME/.config/niri/config.kdl"
+sed -i "s/backdrop-color \"#[a-fA-F0-9]\{6\}\"/backdrop-color \"$bg\"/" "$HOME/.config/niri/config.kdl"
 success "Niri"
 
 # ─────────────────────────────────────────────────────────────

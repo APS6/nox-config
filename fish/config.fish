@@ -6,3 +6,5 @@ end
 
 # Starship prompt
 starship init fish | source
+
+zoxide init fish | source

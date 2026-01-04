@@ -16,9 +16,7 @@ input {
         tap // Enable tap-to-click
         natural-scroll // Enable natural (macOS-style) scrolling
     }
-
-    focus-follows-mouse // Automatically focus windows under the mouse pointer
-    workspace-auto-back-and-forth // Enable workspace back & forth switching
+    focus-follows-mouse max-scroll-amount="50%"
 }
 
 // ────────────── Output Configuration ──────────────
@@ -33,6 +31,10 @@ output "eDP-1" {
 
 output "HDMI-A-1" {
     position x=1920 y=0
+    scale 1.0
+        hot-corners {
+        top-right
+    }
 }
 
 // ────────────── Keybindings ──────────────
@@ -146,7 +148,7 @@ binds {
     MOD+TAB                             { focus-workspace-previous; }
 
     // ─── Layout Controls ───
-    MOD+CTRL+F                          { expand-column-to-available-width; }
+    MOD+F                          { expand-column-to-available-width; }
     MOD+CTRL+C                          { center-visible-columns; }
     MOD+MINUS                           { set-column-width "-10%"; }
     MOD+EQUAL                           { set-column-width "+10%"; }
@@ -155,7 +157,7 @@ binds {
 
     // ─── Modes ───
     MOD+V                               { toggle-window-floating; }
-    MOD+F                               { fullscreen-window; }
+    MOD+SHIFT+F                               { fullscreen-window; }
     MOD+Q                               { toggle-column-tabbed-display; }
 
     // ─── Screenshots ───
@@ -185,6 +187,11 @@ binds {
 
     prefer-no-csd // Disable program decorations
     screenshot-path "~/Pictures/Screenshots/screenshot-%Y-%m-%d-%H-%M-%S.png"
+
+// ────────────── Overview Settings ──────────────
+    overview {
+        backdrop-color "#2d353b"
+    }
 
 // ────────────── Layout Settings ──────────────
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Layout
