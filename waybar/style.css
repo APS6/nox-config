@@ -118,6 +118,8 @@ window#waybar > box {
 
 /* System group modules */
 #tray,
+#power-profiles-daemon,
+#custom-power-profile,
 #bluetooth,
 #pulseaudio,
 #battery {

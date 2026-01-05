@@ -21,7 +21,7 @@
 
   "group/right-system": {
     "orientation": "horizontal",
-    "modules": ["tray", "bluetooth", "pulseaudio", "battery"]
+    "modules": ["tray", "custom/power-profile", "bluetooth", "pulseaudio", "battery"]
   },
 
   "niri/workspaces": {
@@ -140,5 +140,23 @@
     "interval": 3,
     "tooltip": false,
     "on-click": "ghostty -e btop"
+  },
+
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "format-icons": {
+      "performance": "󰓅",
+      "balanced": "󰾅",
+      "power-saver": "󰾆"
+    },
+    "tooltip-format": "Power profile: {profile}",
+    "on-click": "~/.config/waybar/scripts/power-menu.sh"
+  },
+
+  "custom/power-profile": {
+    "exec": "~/.config/waybar/scripts/power-profile-status.sh",
+    "interval": 5,
+    "on-click": "~/.config/waybar/scripts/power-menu.sh",
+    "tooltip": false
   }
 }

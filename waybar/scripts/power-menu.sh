@@ -1,14 +1,16 @@
 #!/bin/bash
-options="Shutdown\nReboot\nLogout\nSuspend\nHibernate\nLock\nExit"
-chosen=$(echo -e "$options" | wofi --dmenu --prompt "Power Menu" --width 300 --height 234)
+# Power profile selector using walker dmenu
 
-case $chosen in
-  "Shutdown") systemctl poweroff ;;
-  "Reboot")   systemctl reboot ;;
-  "Logout")   niri msg action quit --skip-confirmation ;;
-  "Suspend")  systemctl suspend ;;
-  "Hibernate") systemctl hibernate ;;
-  "Lock")     swaylock ;;
-  "Exit")     exit 0 ;;
-  *)          exit 1 ;;
+current=$(powerprofilesctl get)
+
+options="󰓅  Performance
+󰾅  Balanced
+󰾆  Power Saver"
+
+selected=$(echo -e "$options" | walker --dmenu --minheight 1 -p "Power Profile ($current)")
+
+case "$selected" in
+    *Performance*) powerprofilesctl set performance ;;
+    *Balanced*) powerprofilesctl set balanced ;;
+    *Power*) powerprofilesctl set power-saver ;;
 esac
