@@ -16,7 +16,7 @@
 
   "group/right-stats": {
     "orientation": "horizontal",
-    "modules": ["cpu", "memory", "custom/gpu", "network#stats"]
+    "modules": ["cpu", "memory", "custom/gpu", "network"]
   },
 
   "group/right-system": {
@@ -94,9 +94,9 @@
       "warning": 20,
       "critical": 10
     },
-    "format": "{icon} {capacity}%",
-    "format-charging": "󰂄 {capacity}%",
-    "format-plugged": "󰚥 {capacity}%",
+    "format": "{icon} {capacity}% ",
+    "format-charging": "󰂄 {capacity}% ",
+    "format-plugged": "󰚥 {capacity}% ",
     "format-full": "󰁹 full",
     "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
     "tooltip-format": "{power:.1f}W  {timeTo}",
@@ -140,11 +140,5 @@
     "interval": 3,
     "tooltip": false,
     "on-click": "ghostty -e btop"
-  },
-
-  "network#stats": {
-    "format": "⇣{bandwidthDownBytes} ⇡{bandwidthUpBytes}",
-    "interval": 3,
-    "tooltip": false
   }
 }
