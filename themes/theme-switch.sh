@@ -265,6 +265,39 @@ success "SwayOSD reloaded"
 makoctl reload 2>/dev/null && success "Mako reloaded" || info "Mako not running"
 
 # ─────────────────────────────────────────────────────────────
+# OPENCODE
+# ─────────────────────────────────────────────────────────────
+info "Applying OpenCode theme..."
+OPENCODE_CONFIG="$HOME/.config/opencode/opencode.jsonc"
+OPENCODE_THEMES="tokyonight tokyo-night everforest ayu catppuccin catppuccin-macchiato gruvbox kanagawa nord matrix one-dark"
+
+# Map theme names and check if built-in
+oc_theme="system"
+case "$THEME_NAME" in
+    tokyo-night) oc_theme="tokyonight" ;;
+    matte-black|hackerman) oc_theme="matrix" ;;
+    *)
+        for t in $OPENCODE_THEMES; do
+            if [[ "$THEME_NAME" == "$t" ]]; then
+                oc_theme="$THEME_NAME"
+                break
+            fi
+        done
+        ;;
+esac
+
+if [[ -f "$OPENCODE_CONFIG" ]]; then
+    sed -i "s/\"theme\": \"[^\"]*\"/\"theme\": \"$oc_theme\"/" "$OPENCODE_CONFIG"
+else
+    mkdir -p "$(dirname "$OPENCODE_CONFIG")"
+    echo "{
+  \"\$schema\": \"https://opencode.ai/config.json\",
+  \"theme\": \"$oc_theme\"
+}" > "$OPENCODE_CONFIG"
+fi
+success "OpenCode ($oc_theme)"
+
+# ─────────────────────────────────────────────────────────────
 # SAVE CURRENT THEME
 # ─────────────────────────────────────────────────────────────
 echo "$THEME_NAME" > "$THEME_DIR/current"
