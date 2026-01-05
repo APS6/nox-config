@@ -223,7 +223,10 @@ WALLPAPER_DIR="$THEME_DIR/themes/$THEME_NAME/wallpapers"
 if [[ -d "$WALLPAPER_DIR" ]] && [[ -n "$(ls -A "$WALLPAPER_DIR" 2>/dev/null)" ]]; then
     WALLPAPER=$(find "$WALLPAPER_DIR" -type f \( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" \) | sort | head -1)
     if [[ -n "$WALLPAPER" ]]; then
-        swww img "$WALLPAPER" --transition-type grow --transition-pos 0.9,0.1 --transition-duration 0.8 2>/dev/null || \
+        # Create/update symlink for startup
+        ln -sf "$WALLPAPER" "$THEME_DIR/wallpaper"
+        # Set wallpaper now
+        swww img "$WALLPAPER" --transition-type fade --transition-pos 0.9,0.1 --transition-duration 0.8 2>/dev/null || \
         swww img "$WALLPAPER" 2>/dev/null || \
         info "swww not running, skipping wallpaper"
         success "Wallpaper: $(basename "$WALLPAPER")"
