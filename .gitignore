@@ -32,16 +32,12 @@
 !mako/**
 !swayidle/
 !swayidle/**
-!swaylock/
-!swaylock/**
 !swayosd/
 !swayosd/**
-!wlogout/
-!wlogout/**
 
 # Theming
 !gtk-3.0/
-!gtk-3.0/**
+!gtk-3.0/settings.ini
 !gtk-4.0/
 !gtk-4.0/**
 !Kvantum/
