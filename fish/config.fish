@@ -9,3 +9,8 @@ starship init fish | source
 
 zoxide init fish | source
 mise activate fish | source
+
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH /home/aps/.lmstudio/bin
+# End of LM Studio CLI section
+

@@ -51,7 +51,7 @@ default = [
 ]
 empty = ["desktopapplications"]
 ignore_preview = []
-max_results = 50
+max_results = 100
 
 [providers.argument_delimiter]
 runner = " "

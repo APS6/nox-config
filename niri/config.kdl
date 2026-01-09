@@ -16,7 +16,7 @@ input {
         tap // Enable tap-to-click
         natural-scroll // Enable natural (macOS-style) scrolling
     }
-    focus-follows-mouse max-scroll-amount="50%"
+    focus-follows-mouse max-scroll-amount="40%"
 }
 
 // ────────────── Output Configuration ──────────────
@@ -42,7 +42,7 @@ output "HDMI-A-1" {
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Key-Bindings
 
 binds {
-    MOD+SHIFT+ESCAPE                     { show-hotkey-overlay; }
+    MOD+SHIFT+ESCAPE                    allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
     // ─── Applications ───
     MOD+RETURN                          hotkey-overlay-title="Open Terminal: ghostty" { spawn "ghostty"; }
@@ -146,7 +146,7 @@ binds {
     MOD+SHIFT+8                         { move-column-to-workspace 8; }
     MOD+SHIFT+9                         { move-column-to-workspace 9; }
 
-    MOD+TAB                             { focus-workspace-previous; }
+    MOD+TAB                             { focus-monitor-next; }
 
     // ─── Layout Controls ───
     MOD+F                          { expand-column-to-available-width; }
