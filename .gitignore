@@ -48,8 +48,8 @@
 !themes/**
 
 # Editors / Dev tools
-!zed/
-!zed/**
+!zed/themes
+!zed/themes/**
 !mise/
 !mise/**
 !opencode/
