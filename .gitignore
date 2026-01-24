@@ -54,3 +54,6 @@
 !mise/**
 !opencode/
 !opencode/**
+
+!satty
+!satty/config.toml

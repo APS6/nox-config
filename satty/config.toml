@@ -1,0 +1,13 @@
+[general]
+# Enable early exit after saving
+early-exit = true
+
+# Set the default output filename pattern
+# This will auto-generate names like: screenshot-2026-01-24-153045.png
+output-filename = "~/Pictures/Screenshots/screenshot-%Y-%m-%d-%H%M%S.png"
+
+# Allow editing the filename in the save dialog
+copy-command = "wl-copy"
+
+# Initial tool on startup
+initial-tool = "brush"
