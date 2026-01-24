@@ -5,6 +5,8 @@ window-padding-x = 12
 window-padding-y = 8
 window-decoration = false
 
+confirm-close-surface = false
+
 background = #2d353b
 foreground = #d3c6aa
 cursor-color = #d3c6aa

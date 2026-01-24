@@ -14,7 +14,7 @@
 
 # Shell / Prompt
 !fish/
-!fish/**
+!fish/config.fish
 !starship.toml
 
 # Terminal

@@ -1,5 +1,5 @@
 ---
-name: niri-desktop
+name: system-config
 description: Configure CachyOS Niri desktop - themes, keybindings, waybar, walker, and related components
 license: MIT
 compatibility: opencode
@@ -11,7 +11,7 @@ metadata:
 
 # Niri Desktop Configuration Skill
 
-This skill provides knowledge for configuring the CachyOS + Niri Wayland desktop environment for user `aps`.
+This skill provides knowledge for configuring the CachyOS + Niri Wayland desktop environment for user `aps`. Use it before make any configuration changes to the system.
 
 ## System Overview
 
