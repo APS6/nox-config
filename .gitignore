@@ -1,41 +1,30 @@
 # Ignore everything by default
 *
 
-# Allow .gitignore itself
 !.gitignore
 
-# Window manager / Desktop
 !niri/
 !niri/**
-!waybar/
-!waybar/**
+
+!noctalia/
+!noctalia/**
+
 !walker/
 !walker/**
 
-# Shell / Prompt
 !fish/
 !fish/config.fish
 !starship.toml
 
-# Terminal
 !ghostty/
 !ghostty/**
 
-# System tools
 !btop/
 !btop/**
 
-# Lock / Session
-!gtklock/
-!gtklock/**
-!mako/
-!mako/**
 !swayidle/
 !swayidle/**
-!swayosd/
-!swayosd/**
 
-# Theming
 !gtk-3.0/
 !gtk-3.0/settings.ini
 !gtk-4.0/
@@ -47,7 +36,6 @@
 !themes/
 !themes/**
 
-# Editors / Dev tools
 !zed/themes
 !zed/themes/**
 !mise/

@@ -1,0 +1,26 @@
+
+// ────────────── Window Rules ──────────────
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
+
+    window-rule {
+        match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+        match app-id="alacritty-float"
+
+        open-floating true
+    }
+
+    window-rule {
+        match app-id=r#"^zen$"#
+        match app-id=r#"^zen-browser$"#
+        match app-id=r#"^brave-browser$"#
+        match app-id=r#"^Brave-browser$"#
+        match app-id=r#"^brave-music\.youtube\.com"#
+        match app-id=r#"^dev\.zed\.Zed$"#
+        match app-id=r#"^zed$"#
+        open-maximized true
+    }
+
+    window-rule {
+        geometry-corner-radius 0
+        clip-to-geometry true
+    }
