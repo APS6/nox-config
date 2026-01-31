@@ -9,6 +9,7 @@ binds {
     MOD+SPACE                           hotkey-overlay-title="Open App Launcher: qs" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
     MOD+C                               hotkey-overlay-title="Open Clipboard: qs" { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "clipboard"; }
     MOD+SHIFT+T                         hotkey-overlay-title="Theme Picker" { spawn-sh "~/.config/themes/theme-picker.sh"; }
+    MOD+ALT+T                         hotkey-overlay-title="Theme Picker" { spawn-sh "qs -c noctalia-shell ipc call wallpaper toggle"; }
     MOD+B                               hotkey-overlay-title="Open Browser: zen" { spawn "zen-browser"; }
     MOD+Z                               hotkey-overlay-title="Open Editor: zed" { spawn "zeditor"; }
     MOD+T                               hotkey-overlay-title="Open System Monitor: btop" { spawn "ghostty" "-e" "btop"; }
@@ -111,7 +112,7 @@ binds {
     MOD+TAB                             { focus-monitor-next; }
 
     // ─── Layout Controls ───
-    MOD+F                          { expand-column-to-available-width; }
+    MOD+F                          { maximize-column; }
     MOD+CTRL+C                          { center-visible-columns; }
     MOD+MINUS                           { set-column-width "-10%"; }
     MOD+EQUAL                           { set-column-width "+10%"; }

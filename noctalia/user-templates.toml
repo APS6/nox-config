@@ -1,0 +1,8 @@
+# Noctalia User Templates Configuration
+# Auto-generated templates for Starship prompt
+
+[config]
+
+[templates.starship]
+input_path = "~/.config/noctalia/templates/starship.toml"
+output_path = "~/.config/starship.toml"

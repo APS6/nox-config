@@ -1,44 +1,165 @@
 ---
 name: system-config
-description: Configure CachyOS Niri desktop - themes, keybindings, waybar, walker, and related components
+description: Configure CachyOS Niri desktop with Noctalia shell
 license: MIT
 compatibility: opencode
 metadata:
   system: cachyos
   compositor: niri
   shell: fish
+  desktop_shell: noctalia
 ---
 
 # Niri Desktop Configuration Skill
 
-This skill provides knowledge for configuring the CachyOS + Niri Wayland desktop environment for user `aps`. Use it before make any configuration changes to the system.
+**User**: aps  
+**OS**: CachyOS (Arch-based)  
+**Compositor**: Niri (scrolling tiling Wayland)  
+**Desktop Shell**: Noctalia (quickshell-based)  
 
-## System Overview
+## Architecture Overview
 
-- **OS**: CachyOS (Arch-based)
-- **Compositor**: Niri (scrolling tiling Wayland compositor)
+Noctalia is a quickshell-based desktop shell that replaces multiple components:
+- **Status Bar** - Built-in (replaces Waybar)
+- **Notifications** - Built-in (replaces Mako/dunst)  
+- **Lock Screen** - Built-in with PAM auth (replaces gtklock/swaylock)
+- **OSD** - Built-in (replaces SwayOSD)
+- **App Launcher** - Built-in with clipboard history
+- **Control Center** - Built-in system menu
+- **Wallpaper** - Built-in with transitions (replaces swww)
+- **Theme System** - Auto-applies to 13 apps via templates + user templates
+
+**Other tools**:
+- **Launcher (fallback)**: Walker (only used for theme picker)
+- **Terminals**: Ghostty (primary), Alacritty (floating)
+- **Editor**: Zed
+- **Browser**: Zen Browser + Brave
 - **Shell**: Fish with Starship prompt
-- **Terminal**: Ghostty
-- **Launcher**: Walker
-- **Bar**: Waybar
-- **Notifications**: Mako
-- **Lock Screen**: gtklock
-- **Wallpaper**: swww
+- **Clipboard**: cliphist + wl-clipboard
 
 ## Key Config Locations
 
 | Component | Config Path |
 |-----------|-------------|
-| Niri | `~/.config/niri/config.kdl` |
+| Niri | `~/.config/niri/` (modular: `config.kdl` + `cfg/*.kdl`) |
+| Noctalia | `~/.config/noctalia/settings.json` |
+| Noctalia Colors | `~/.config/noctalia/colors.json` |
+| Noctalia Templates | `~/.config/noctalia/user-templates.toml` |
+| Noctalia User Templates | `~/.config/noctalia/templates/` |
 | Ghostty | `~/.config/ghostty/config` (generated) |
+| Alacritty | `~/.config/alacritty/` |
 | Walker | `~/.config/walker/config.toml` |
-| Waybar | `~/.config/waybar/config` + `style.css` (generated) |
 | Fish | `~/.config/fish/config.fish` |
-| Starship | `~/.config/starship.toml` (generated) |
-| Mako | `~/.config/mako/config` (generated) |
-| gtklock | `~/.config/gtklock/config.ini` + `style.css` (generated) |
-| SwayOSD | `~/.config/swayosd/style.css` (generated) |
+| Starship | `~/.config/starship.toml` (auto-generated) |
 | Themes | `~/.config/themes/` |
+| GTK | `~/.config/gtk-3.0/` + `~/.config/gtk-4.0/` |
+| Swayidle | `~/.config/swayidle/config` |
+
+## Important: How to Make Changes
+
+**Noctalia settings**: Edit `~/.config/noctalia/settings.json` (single 600+ line file)
+- Keybinds, widgets, colors, behaviors all in one place
+- Changes apply via IPC or restart Noctalia
+
+**Niri keybinds**: Edit `~/.config/niri/cfg/keybinds.kdl` (not main config.kdl)
+
+**Theme switching**: Use `~/.config/themes/theme-picker.sh` (GUI) or manually call Noctalia IPC
+
+**Window rules**: Edit `~/.config/niri/cfg/rules.kdl`
+
+## Noctalia Shell (quickshell-based)
+
+### What Noctalia Provides
+- **Status Bar** - Floating bar with widgets (replaces Waybar)
+- **Notifications** - Built-in notification daemon (replaces Mako)
+- **Lock Screen** - Integrated lock screen with PAM auth (replaces gtklock)
+- **OSD** - Volume/brightness on-screen display (replaces SwayOSD)
+- **App Launcher** - Built-in launcher with clipboard history
+- **Control Center** - System menu (network, bluetooth, power, etc.)
+- **Wallpaper** - Built-in wallpaper management (replaces swww)
+
+### Noctalia Config Files
+
+**Main Settings**: `~/.config/noctalia/settings.json`
+- All UI configuration in one file (600+ lines)
+- Bar widgets, keybinds, colors, behaviors all configured here
+
+**Current Colors**: `~/.config/noctalia/colors.json`
+- Material You style color scheme
+- Auto-generated based on wallpaper/theme
+
+### Noctalia Theming
+
+Noctalia auto-generates themed configs for: ghostty, alacritty, walker, niri, zed, gtk3/4, btop, cava, zenBrowser, mangoHud, qt, foot, and KDE apps. See the `templates.activeTemplates` section in `settings.json`.
+
+**User Templates**: Enable in Settings → Color Scheme → Templates → Advanced → User templates
+- Templates defined in `~/.config/noctalia/user-templates.toml`
+- Template files in `~/.config/noctalia/templates/`
+- Auto-regenerate when theme changes
+- Currently used for: **Starship** prompt
+
+### Noctalia IPC Commands
+
+```bash
+# Lock screen
+qs -c noctalia-shell --lock
+
+# Launch app launcher
+qs -c noctalia-shell --launcher
+
+# Open control center
+qs -c noctalia-shell --control-center
+
+# Change wallpaper
+qs -c noctalia-shell --set-wallpaper /path/to/wallpaper
+
+# Set color scheme (triggers template regeneration)
+qs -c noctalia-shell ipc call colorScheme set <ThemeName>
+```
+
+## User Templates System
+
+**Config**: `~/.config/noctalia/user-templates.toml`
+
+**Template syntax**: `{{colors.name.mode.format}}`
+- Example: `{{colors.primary.default.hex}}`
+- Colors: primary, secondary, tertiary, error, surface, on_surface, etc.
+- Modes: default, dark, light
+- Formats: hex, rgb, rgba, hsl, red, green, blue, etc.
+
+**Starship template**: `~/.config/noctalia/templates/starship.toml`
+- Uses `{{colors.primary.default.hex}}` for accent color
+- Auto-generated at `~/.config/starship.toml` on theme change
+
+## Niri Configuration
+
+Modular config structure in `~/.config/niri/`:
+
+```
+niri/
+├── config.kdl           # Main entry point
+├── cfg/
+│   ├── autostart.kdl    # Startup apps
+│   ├── keybinds.kdl     # Keybindings
+│   ├── display.kdl      # Monitor outputs
+│   ├── input.kdl        # Keyboard/touchpad
+│   ├── layout.kdl       # Layout settings
+│   ├── rules.kdl        # Window rules
+│   ├── misc.kdl         # Environment variables
+│   ├── animation.kdl    # Animations
+│   └── noctalia.kdl     # Noctalia-specific colors
+```
+
+### Startup Applications
+
+Defined in `~/.config/niri/cfg/autostart.kdl`:
+- polkit-kde-authentication-agent-1 (authentication dialogs)
+- Noctalia shell (`qs -c noctalia-shell`)
+- swayidle (auto-lock daemon)
+
+### Keybinds
+
+Keybinds are defined in `~/.config/niri/cfg/keybinds.kdl`. Common binds include terminal, browser, editor, lock screen, and launcher (MOD+Space for Walker theme picker). Check the file for current bindings.
 
 ## Theme System
 
@@ -46,268 +167,167 @@ This skill provides knowledge for configuring the CachyOS + Niri Wayland desktop
 
 ```
 ~/.config/themes/
-├── themes/           # Theme definitions
-│   ├── catppuccin/
-│   │   ├── colors.conf    # Color variables (sourced by bash)
-│   │   ├── wallpapers/    # Theme wallpapers
-│   │   ├── zed.json       # Zed editor theme (optional)
-│   │   └── btop.theme     # btop theme (optional)
-│   ├── tokyo-night/
-│   ├── nord/
-│   ├── everforest/
-│   ├── gruvbox/
-│   ├── kanagawa/
-│   ├── matte-black/
-│   ├── hackerman/
-│   └── ethereal/
-├── templates/        # Templates with ${variable} placeholders
-│   ├── ghostty.conf
-│   ├── walker.css
-│   ├── waybar.css
-│   ├── swayosd.css
-│   ├── starship.toml
-│   ├── gtklock.css
-│   └── mako.conf
-├── theme-switch.sh   # Main theme switcher script
-├── theme-picker.sh   # Walker integration for GUI picker
-├── current           # Stores current theme name
-└── wallpaper         # Symlink to current wallpaper
+├── themes/                    # Theme directories (just need wallpapers/)
+│   └── <ThemeName>/
+│       └── wallpapers/        # Theme wallpapers (png, jpg, jpeg)
+├── theme-picker.sh           # Walker-based theme picker (sets scheme + wallpaper)
+└── current                   # Active theme name
 ```
 
-### Color Variables (colors.conf)
+### How Themes Work
 
-Each theme's `colors.conf` must define these variables:
+**Colors**: Noctalia generates the color scheme and stores in `~/.config/noctalia/colors.json`. All apps (including Starship via user templates) get themed automatically when you change the color scheme.
 
-```bash
-name="Theme Display Name"
-ghostty_theme="Builtin Theme Name"  # Optional, uses palette if not set
+**Wallpapers**: Each theme only needs a `wallpapers/` directory with image files. The picker selects the first one alphabetically.
 
-# Core colors
-bg="#1e1e2e"          # Main background
-bg_light="#313244"    # Slightly lighter background
-bg_lighter="#45475a"  # Even lighter (borders, inactive)
-fg="#cdd6f4"          # Main foreground
-fg_dim="#7f849c"      # Dimmed text
-accent="#b4befe"      # Accent color (focus rings, highlights)
-border="#c6d0f5"      # Border color
+**Available Themes**: 12 themes available (Ayu, Catppuccin, Cherry Blossom, Dracula, Eldritch, Everforest, Gruvbox, Kanagawa, Nord, Osaka jade, Rose Pine, Tokyo Night)
 
-# Semantic colors
-red="#f38ba8"
-green="#a6e3a1"
-yellow="#f9e2af"
-blue="#89b4fa"
-magenta="#f5c2e7"
-cyan="#94e2d5"
-
-# Terminal specific
-cursor="#f5e0dc"
-selection="#f5e0dc"
-
-# Optional: full 16-color palette (palette_0 through palette_15)
-```
-
-### Using the Theme Switcher
+### Using the Theme Picker
 
 ```bash
-# Switch theme via CLI
-~/.config/themes/theme-switch.sh catppuccin
-
-# Available themes
-~/.config/themes/theme-switch.sh  # Shows list when no arg
-
-# GUI picker (bound to MOD+Shift+T)
+# GUI picker (MOD+Shift+T) - sets Noctalia scheme + wallpaper
 ~/.config/themes/theme-picker.sh
+
+# Manual theme switch via CLI
+qs -c noctalia-shell ipc call colorScheme set <ThemeName>
+# Then manually set wallpaper if desired
 ```
 
-### What Theme Switcher Updates
+### What Happens When You Switch Themes
 
-1. **Ghostty** - Uses built-in theme or generates custom palette
-2. **Walker** - CSS template with color variables
-3. **Waybar** - CSS template (transparent window, styled box)
-4. **SwayOSD** - CSS for volume/brightness OSD
-5. **Mako** - Notification daemon config
-6. **Starship** - Accent color in prompt
-7. **btop** - Copies theme file if present
-8. **gtklock** - Lock screen CSS + wallpaper path
-9. **Niri** - Updates focus-ring colors and overview backdrop-color
-10. **Zed** - Copies theme JSON and updates settings.json
-11. **Wallpaper** - Sets via swww with transition animation
+1. **Noctalia** generates new color scheme and regenerates all themed configs (including Starship via user template)
+2. **Picker** sets wallpaper from theme's wallpapers/ directory (if exists)
+3. **Picker** saves theme name to `current` file
 
-### Adding a New Theme
+All apps update automatically - no manual template substitution needed.
 
-1. Create directory: `~/.config/themes/themes/<name>/`
-2. Create `colors.conf` with all required variables
-3. Add wallpapers to `wallpapers/` subdirectory
-4. Optionally add `zed.json` and `btop.theme`
-5. Test: `~/.config/themes/theme-switch.sh <name>`
+## Authentication & PAM
 
-### Adding a New App to Theme Switcher
+### Screen Lock
 
-1. Create template in `~/.config/themes/templates/<app>.ext`
-   - Use `${variable}` syntax for color substitution
-2. Edit `~/.config/themes/theme-switch.sh`:
-   - Add section to generate config using `envsubst`
-   - Add reload command if app supports it
-3. Update `.gitignore` to exclude generated file
+Noctalia provides the lock screen with PAM authentication. Uses the "login" PAM service.
 
-## Files NOT to Edit Directly
+**Auto-lock**: `~/.config/swayidle/config`
+```
+timeout 120 'qs -c noctalia-shell --lock'
+timeout 600 'niri msg action power-off-monitors'
+before-sleep 'qs -c noctalia-shell --lock'
+```
 
-These files are **generated by theme-switch.sh**. Edit the templates instead:
+**Toggle script**: `~/.config/swayidle/toggle.sh` (MOD+Ctrl+I)
 
-| Generated File | Edit This Instead |
-|----------------|-------------------|
-| `ghostty/config` | `themes/templates/ghostty.conf` |
-| `walker/themes/default/style.css` | `themes/templates/walker.css` |
-| `waybar/style.css` | `themes/templates/waybar.css` |
-| `swayosd/style.css` | `themes/templates/swayosd.css` |
-| `mako/config` | `themes/templates/mako.conf` |
-| `gtklock/style.css` | `themes/templates/gtklock.css` |
-| `starship.toml` | `themes/templates/starship.toml` |
+### Fingerprint Auth (fprintd)
 
-Also, `niri/config.kdl` has colors updated in-place by sed.
+**Important**: For Noctalia lock screen to use fingerprint, fprintd must be configured in `/etc/pam.d/system-auth`:
+
+```
+#%PAM-1.0
+
+auth       required                    pam_faillock.so      preauth
+-auth      [success=3 default=ignore]  /usr/lib/security/pam_fprintd.so
+-auth      [success=2 default=ignore]  pam_systemd_home.so
+auth       [success=1 default=bad]     pam_unix.so          try_first_pass nullok
+auth       [default=die]               pam_faillock.so      authfail
+auth       optional                    pam_permit.so
+auth       required                    pam_env.so
+auth       required                    pam_faillock.so      authsucc
+...
+```
+
+**Note**: Use full path `/usr/lib/security/pam_fprintd.so` - Noctalia may not find it otherwise.
+
+**Enroll fingerprints**: `fprintd-enroll`
+
+### Polkit Agent
+
+**Agent**: `/usr/lib/polkit-kde-authentication-agent-1`
+- Started automatically with Niri
+- Provides authentication dialogs for privileged operations
+
+## Login Manager (greetd + tuigreet)
+
+Uses greetd with tuigreet in a minimal sway session.
+
+**Config files**:
+- `/etc/greetd/config.toml` - Main greetd config
+- `/etc/greetd/sway-config` - Sway session for greeter
+
+Features: remembers last user/session, shows asterisks for password, displays time, launches niri-session.
+
+## Clipboard
+
+Uses **wl-clipboard** with **cliphist** for history. Clipboard watching is configured in Noctalia `settings.json` - look for clipboard-related settings in the `appLauncher` section.
 
 ## Common Tasks
 
 ### Change a keybinding
 
-Edit `~/.config/niri/config.kdl` in the `binds { }` section.
+Edit `~/.config/niri/cfg/keybinds.kdl`
 
 ### Add a window rule
 
+Edit `~/.config/niri/cfg/rules.kdl`. Example patterns:
 ```kdl
 window-rule {
-    match app-id=r#"^app-id-regex$"#
-    open-maximized true  // or open-floating, etc.
+    match app-id=r#"^firefox$"#
+    open-maximized true
 }
 ```
 
 ### Adjust gaps or focus ring
 
-Edit `layout { }` section in niri config.
-
-### Add new app to waybar
-
-1. Edit `~/.config/waybar/modules.json` for module definition
-2. Edit `~/.config/waybar/config` to add to modules-left/center/right
-3. Edit `~/.config/themes/templates/waybar.css` for styling
+Edit `~/.config/niri/cfg/layout.kdl`
 
 ### Reload after changes
 
-- **Niri**: Changes auto-reload (shows notification)
-- **Waybar**: `pkill waybar && waybar &`
+- **Niri**: Changes auto-reload
+- **Noctalia**: Changes apply immediately via IPC
 - **Walker**: `pkill walker && walker --gapplication-service &`
-- **Mako**: `makoctl reload`
-- **Or just run theme-switch.sh** which reloads all
 
-## Login Manager (greetd + tuigreet)
+### Add custom widget to Noctalia bar
 
-Display manager uses greetd with tuigreet in a minimal sway session.
+Edit `~/.config/noctalia/settings.json` in the `bar.widgets.right` (or left/center) array. Use `CustomButton` widget type to add custom buttons with icons, click handlers, and dynamic text from shell commands.
 
-**Config**: `/etc/greetd/config.toml`
+### Create a new user template
+
+1. Create template file in `~/.config/noctalia/templates/myapp.conf`
+2. Add to `~/.config/noctalia/user-templates.toml`:
 ```toml
-[terminal]
-vt = 1
-
-[default_session]
-command = "sway --config /etc/greetd/sway-config"
-user = "greeter"
+[templates.myapp]
+input_path = "~/.config/noctalia/templates/myapp.conf"
+output_path = "~/.config/myapp/theme.conf"
+post_hook = "pkill -USR1 myapp"  # optional reload command
 ```
+3. Use template syntax like `{{colors.primary.default.hex}}`
+4. Trigger regeneration by changing theme
 
-**Sway config for greeter**: `/etc/greetd/sway-config`
-```
-output eDP-1 enable
-output * disable
-output eDP-1 enable
+## Auto-Generated Files
 
-exec "foot --fullscreen --font='JetBrainsMono Nerd Font:size=14' tuigreet --remember --remember-session --asterisks --time --width 55 --container-padding 2 --sessions /usr/share/wayland-sessions --cmd niri-session; swaymsg exit"
-```
+These files are managed automatically - edit their sources instead:
 
-tuigreet options:
-- `--remember` - Remember last user
-- `--remember-session` - Remember last session
-- `--asterisks` - Show asterisks for password
-- `--time` - Show current time
-- `--cmd niri-session` - Launch niri via session wrapper
-
-## Idle & Lock (swayidle + gtklock)
-
-**Config**: `~/.config/swayidle/config`
-```
-# Lock after 5 minutes idle
-timeout 300 'gtklock -d'
-
-# Turn off monitors after 10 minutes idle
-timeout 600 'niri msg action power-off-monitors'
-
-# Lock before sleep/suspend
-before-sleep 'gtklock -d'
-```
-
-**Toggle script**: `~/.config/swayidle/toggle.sh`
-- Bound to `MOD+Ctrl+I`
-- Toggles swayidle on/off with notification
-
-**gtklock**: Minimal lock screen showing only password input, themed via CSS.
-
-## Power Menu
-
-Walker-based power menu at `~/.config/walker/power-menu.sh`:
-- Bound to `MOD+Escape`
-- Options: Lock, Suspend, Logout, Reboot, Shutdown
-
-## Fingerprint Auth (fprintd)
-
-Fingerprint reader configured for sudo authentication.
-
-**PAM config** (`/etc/pam.d/sudo`):
-```
-auth       sufficient   pam_fprintd.so
-auth       include      system-auth
-...
-```
-
-Enroll fingerprints: `fprintd-enroll`
-
-## Snapper (Btrfs Snapshots)
-
-CachyOS uses snapper for btrfs snapshots with limine bootloader integration.
-
-**Config**: `/etc/snapper/configs/root`
-
-Key settings:
-- `NUMBER_LIMIT="50"` - Keep up to 50 numbered snapshots
-- `NUMBER_LIMIT_IMPORTANT="15"` - Keep 15 important snapshots
-- `TIMELINE_CREATE="no"` - No automatic timeline snapshots
-- `EMPTY_PRE_POST_CLEANUP="yes"` - Clean empty pre/post pairs
-
-**Systemd services**:
-- `snapper-cleanup.timer` - Periodic cleanup
-- `limine-snapper-sync.service` - Syncs snapshots to bootloader
-
-**Commands**:
-```bash
-# List snapshots
-snapper list
-
-# Create manual snapshot
-snapper create -d "description"
-
-# Create pre/post pair (for system changes)
-snapper create -t pre -p  # returns number
-# ... make changes ...
-snapper create -t post --pre-number=<num>
-
-# Rollback (via bootloader menu or)
-snapper rollback <num>
-```
+| Generated File | Source/Manager |
+|----------------|----------------|
+| `ghostty/config` | Noctalia template in `settings.json` |
+| `alacritty/themes/noctalia.toml` | Noctalia |
+| `walker/themes/noctalia/style.css` | Noctalia |
+| `gtk-3.0/noctalia.css` | Noctalia |
+| `gtk-4.0/noctalia.css` | Noctalia |
+| `starship.toml` | Noctalia user template |
+| `niri/cfg/noctalia.kdl` | Noctalia |
 
 ## Git Repository
 
-The `.config` directory is tracked at `github.com/APS6/nox-config`.
+Dotfiles tracked at `github.com/APS6/nox-config`.
 
 ## User Preferences
 
-- Font: JetBrains Mono Nerd Font
-- No emojis in configs unless requested
-- Minimal/clean aesthetic
-- Prefers AI to make config changes rather than manual editing
+- **Font**: JetBrains Mono Nerd Font
+- **Location**: Haldwani, Uttarakhand (weather)
+- **No emojis** unless requested
+- **Prefers AI** to make config changes
+
+---
+
+## Maintenance Note
+
+**Remember**: After making changes to any system components that are documented in this skill (themes, auth, keybinds, Noctalia config, etc.), update this skill file to reflect the current state. This ensures the AI has accurate information for future tasks.
