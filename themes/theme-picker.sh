@@ -24,12 +24,12 @@ selected=$(echo "$themes" | walker --dmenu --placeholder "Select Theme")
 if [[ -n "$selected" ]]; then
     # Set Noctalia color scheme (this triggers template regeneration including starship)
     qs -c noctalia-shell ipc call colorScheme set "$selected"
-    
+
     # Set wallpaper from theme directory
     info "Setting wallpaper..."
     WALLPAPER_DIR="$THEME_DIR/themes/$selected/wallpapers"
     if [[ -d "$WALLPAPER_DIR" ]]; then
-        WALLPAPER=$(find "$WALLPAPER_DIR" -maxdepth 1 -type f \( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" \) 2>/dev/null | sort | head -1)
+        WALLPAPER=$(find "$WALLPAPER_DIR" -maxdepth 1 -type f \( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.webp" \) 2>/dev/null | sort | head -1)
         if [[ -n "$WALLPAPER" ]]; then
             qs -c noctalia-shell ipc call wallpaper set "$WALLPAPER" "HDMI-A-1" 2>/dev/null || true
             qs -c noctalia-shell ipc call wallpaper set "$WALLPAPER" "eDP-1" 2>/dev/null || true
@@ -40,9 +40,9 @@ if [[ -n "$selected" ]]; then
     else
         info "No wallpapers directory for theme"
     fi
-    
+
     # Save current theme
     echo "$selected" > "$THEME_DIR/current"
-    
+
     success "Theme switched to: $selected"
 fi
