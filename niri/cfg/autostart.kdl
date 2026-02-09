@@ -3,7 +3,7 @@
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Miscellaneous#spawn-sh-at-startup
 
     spawn-sh-at-startup "/usr/lib/polkit-kde-authentication-agent-1 &" // Polkit
-    spawn-at-startup "qs" "-c" "noctalia-shell"
+    spawn-sh-at-startup "NOCTALIA_PAM_SERVICE=noctalia-lock qs -c noctalia-shell"
     spawn-sh-at-startup "swayidle -w" // Auto-lock after idle
 
     prefer-no-csd // Disable program decorations

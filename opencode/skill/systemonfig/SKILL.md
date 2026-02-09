@@ -203,9 +203,45 @@ All apps update automatically - no manual template substitution needed.
 
 ## Authentication & PAM
 
+### PAM Configuration (Lock Screen vs Login)
+
+**Key Insight**: Fingerprint login at greetd doesn't unlock gnome-keyring (needs actual password). We separate PAM configs:
+
+- **Login (greetd)**: `/etc/pam.d/login` → includes `system-auth` → NO fingerprint (requires password for keyring)
+- **Lock Screen (Noctalia)**: `/etc/pam.d/noctalia-lock` → HAS fingerprint (keyring already unlocked)
+
+### Lock Screen PAM (`/etc/pam.d/noctalia-lock`)
+
+```
+#%PAM-1.0
+# Noctalia lock screen - includes fingerprint auth
+
+auth       sufficient   /usr/lib/security/pam_fprintd.so timeout=-1
+auth       include      system-auth
+
+account    include      system-auth
+password   include      system-auth
+session    include      system-auth
+```
+
+**Note**: Use full path `/usr/lib/security/pam_fprintd.so` - Noctalia may not find it otherwise.
+**Note**: `timeout=-1` keeps fingerprint reader active indefinitely.
+
+### Noctalia PAM Service Configuration
+
+Noctalia reads `NOCTALIA_PAM_SERVICE` env var to determine which PAM service to use. Set via systemd override:
+
+**Override file**: `~/.config/systemd/user/noctalia.service.d/pam.conf`
+```ini
+[Service]
+Environment=NOCTALIA_PAM_SERVICE=noctalia-lock
+```
+
+After creating/editing, run: `systemctl --user daemon-reload && systemctl --user restart noctalia.service`
+
 ### Screen Lock
 
-Noctalia provides the lock screen with PAM authentication. Uses the "login" PAM service.
+Noctalia provides the lock screen with PAM authentication.
 
 **Auto-lock**: `~/.config/swayidle/config`
 ```
@@ -218,25 +254,11 @@ before-sleep 'qs -c noctalia-shell --lock'
 
 ### Fingerprint Auth (fprintd)
 
-**Important**: For Noctalia lock screen to use fingerprint, fprintd must be configured in `/etc/pam.d/system-auth`:
-
-```
-#%PAM-1.0
-
-auth       required                    pam_faillock.so      preauth
--auth      [success=3 default=ignore]  /usr/lib/security/pam_fprintd.so
--auth      [success=2 default=ignore]  pam_systemd_home.so
-auth       [success=1 default=bad]     pam_unix.so          try_first_pass nullok
-auth       [default=die]               pam_faillock.so      authfail
-auth       optional                    pam_permit.so
-auth       required                    pam_env.so
-auth       required                    pam_faillock.so      authsucc
-...
-```
-
-**Note**: Use full path `/usr/lib/security/pam_fprintd.so` - Noctalia may not find it otherwise.
-
 **Enroll fingerprints**: `fprintd-enroll`
+
+**Result of this setup**:
+- **greetd login**: Password only (unlocks gnome-keyring properly)
+- **Noctalia lock screen**: Fingerprint OR password (keyring already unlocked from login)
 
 ### Polkit Agent
 

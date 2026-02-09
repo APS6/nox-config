@@ -1,13 +1,22 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "theme": "system",
-  "model": "opencode/big-pickle",
+  "model": "github-copilot/claude-opus-4.5",
   "small_model": "github-copilot/claude-haiku-4.5",
   "agent": {
     "code-reviewer": {
       "description": "Reviews code for best practices and potential issues",
-      "model": "opencode/big-pickle",
+      "model": "github-copilot/claude-sonnet-4.5",
       "prompt": "You are a code reviewer. Focus on security, performance, and maintainability.",
+      "tools": {
+        "write": false,
+        "edit": false,
+      },
+    },
+    "ask": {
+      "description": "Ask questions without writing any code",
+      "model": "opencode/kimi-k2.5-free",
+      "prompt": "You are a helpful assistant. Answer any questions that the user asks.",
       "tools": {
         "write": false,
         "edit": false,
