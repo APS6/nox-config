@@ -1,11 +1,12 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "github-copilot/gpt-5.3-codex",
-  "small_model": "github-copilot/gpt-5.4-mini",
+  "theme": "system",
+  "model": "github-copilot/claude-opus-4.5",
+  "small_model": "github-copilot/claude-haiku-4.5",
   "agent": {
     "code-reviewer": {
       "description": "Reviews code for best practices and potential issues",
-      "model": "github-copilot/gpt-5.3-codex",
+      "model": "github-copilot/claude-sonnet-4.5",
       "prompt": "You are a code reviewer. Focus on security, performance, and maintainability.",
       "tools": {
         "write": false,
@@ -14,7 +15,7 @@
     },
     "ask": {
       "description": "Ask questions without writing any code",
-      "model": "github-copilot/gpt-5.3-codex",
+      "model": "opencode/kimi-k2.5-free",
       "prompt": "You are a helpful assistant. Answer any questions that the user asks.",
       "tools": {
         "write": false,

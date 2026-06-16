@@ -12,5 +12,10 @@ input {
         tap // Enable tap-to-click
         natural-scroll // Enable natural (macOS-style) scrolling
     }
+
+    touch {
+        map-to-output "eDP-1"
+    }
+
     focus-follows-mouse max-scroll-amount="40%"
 }
