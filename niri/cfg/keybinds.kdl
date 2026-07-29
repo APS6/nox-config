@@ -12,6 +12,7 @@ binds {
     MOD+ALT+T                           hotkey-overlay-title="Wallpaper toggle" { spawn-sh "qs -c noctalia-shell ipc call wallpaper toggle"; }
     MOD+B                               hotkey-overlay-title="Open Browser: zen" { spawn "zen-browser"; }
     MOD+Z                               hotkey-overlay-title="Open Editor: zed" { spawn "zeditor"; }
+    MOD+a                               hotkey-overlay-title="Launch Antigravity" { spawn "/home/aps/Applications/Antigravity/Antigravity-x64/antigravity"; }
     MOD+T                               hotkey-overlay-title="Open System Monitor: btop" { spawn "ghostty" "-e" "btop"; }
     MOD+M                               hotkey-overlay-title="Open YouTube Music" { spawn "uwsm" "app" "--" "brave-origin" "--app=https://music.youtube.com"; }
     MOD+SLASH                           hotkey-overlay-title="Open Bitwarden" { spawn "bitwarden-desktop"; }
@@ -126,6 +127,9 @@ binds {
     // ─── Screenshots ───
     // click-drag region (already works)
     PRINT                               { spawn-sh "grim -g \"$(slurp)\" - | satty --filename -"; }
+
+    // focused window (instant, no mouse needed)
+    SHIFT+PRINT                         { spawn-sh "~/.config/niri/scripts/alt-print.sh"; }
 
     // click a monitor/output
     CTRL+PRINT                          { spawn-sh "grim -g \"$(slurp -o)\" - | satty --filename -"; }
