@@ -24,3 +24,7 @@
         geometry-corner-radius 0
         clip-to-geometry true
     }
+    layer-rule {
+      match namespace="^noctalia-backdrop"
+      place-within-backdrop true
+    }

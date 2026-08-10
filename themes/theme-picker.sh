@@ -38,9 +38,6 @@ if [[ -n "$selected" ]]; then
             info "No wallpapers found for theme"
         fi
     else
-        info "No wallpapers directory for theme"
-    fi
-
     # Save current theme
     echo "$selected" > "$THEME_DIR/current"
 

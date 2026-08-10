@@ -30,7 +30,6 @@ Noctalia is a quickshell-based desktop shell that replaces multiple components:
 - **Theme System** - Auto-applies to 13 apps via templates + user templates
 
 **Other tools**:
-- **Launcher (fallback)**: Walker (only used for theme picker)
 - **Terminals**: Ghostty (primary), Alacritty (floating)
 - **Editor**: Zed
 - **Browser**: Zen Browser + Brave
@@ -48,12 +47,9 @@ Noctalia is a quickshell-based desktop shell that replaces multiple components:
 | Noctalia User Templates | `~/.config/noctalia/templates/` |
 | Ghostty | `~/.config/ghostty/config` (generated) |
 | Alacritty | `~/.config/alacritty/` |
-| Walker | `~/.config/walker/config.toml` |
 | Fish | `~/.config/fish/config.fish` |
 | Starship | `~/.config/starship.toml` (auto-generated) |
-| Themes | `~/.config/themes/` |
 | GTK | `~/.config/gtk-3.0/` + `~/.config/gtk-4.0/` |
-| Swayidle | `~/.config/swayidle/config` |
 
 ## Important: How to Make Changes
 
@@ -63,7 +59,7 @@ Noctalia is a quickshell-based desktop shell that replaces multiple components:
 
 **Niri keybinds**: Edit `~/.config/niri/cfg/keybinds.kdl` (not main config.kdl)
 
-**Theme switching**: Use `~/.config/themes/theme-picker.sh` (GUI) or manually call Noctalia IPC
+**Theme switching**: Handled natively by Noctalia (via UI or IPC).
 
 **Window rules**: Edit `~/.config/niri/cfg/rules.kdl`
 
@@ -155,49 +151,25 @@ niri/
 Defined in `~/.config/niri/cfg/autostart.kdl`:
 - polkit-kde-authentication-agent-1 (authentication dialogs)
 - Noctalia shell (`qs -c noctalia-shell`)
-- swayidle (auto-lock daemon)
 
 ### Keybinds
 
-Keybinds are defined in `~/.config/niri/cfg/keybinds.kdl`. Common binds include terminal, browser, editor, lock screen, and launcher (MOD+Space for Walker theme picker). Check the file for current bindings.
+Keybinds are defined in `~/.config/niri/cfg/keybinds.kdl`. Common binds include terminal, browser, editor, lock screen, and launcher. Check the file for current bindings.
 
 ## Theme System
 
-### Structure
-
-```
-~/.config/themes/
-├── themes/                    # Theme directories (just need wallpapers/)
-│   └── <ThemeName>/
-│       └── wallpapers/        # Theme wallpapers (png, jpg, jpeg)
-├── theme-picker.sh           # Walker-based theme picker (sets scheme + wallpaper)
-└── current                   # Active theme name
-```
+Noctalia v5 natively manages themes and wallpapers.
 
 ### How Themes Work
 
-**Colors**: Noctalia generates the color scheme and stores in `~/.config/noctalia/colors.json`. All apps (including Starship via user templates) get themed automatically when you change the color scheme.
+**Colors**: Noctalia generates the color scheme and stores it in `~/.config/noctalia/colors.json`. All apps (including Starship via user templates) get themed automatically when you change the color scheme.
 
-**Wallpapers**: Each theme only needs a `wallpapers/` directory with image files. The picker selects the first one alphabetically.
-
-**Available Themes**: 12 themes available (Ayu, Catppuccin, Cherry Blossom, Dracula, Eldritch, Everforest, Gruvbox, Kanagawa, Nord, Osaka jade, Rose Pine, Tokyo Night)
-
-### Using the Theme Picker
-
-```bash
-# GUI picker (MOD+Shift+T) - sets Noctalia scheme + wallpaper
-~/.config/themes/theme-picker.sh
-
-# Manual theme switch via CLI
-qs -c noctalia-shell ipc call colorScheme set <ThemeName>
-# Then manually set wallpaper if desired
-```
+**Available Themes**: Themes are selected directly through the Noctalia Control Center / Settings UI.
 
 ### What Happens When You Switch Themes
 
-1. **Noctalia** generates new color scheme and regenerates all themed configs (including Starship via user template)
-2. **Picker** sets wallpaper from theme's wallpapers/ directory (if exists)
-3. **Picker** saves theme name to `current` file
+1. **Noctalia** generates a new color scheme and regenerates all themed configs (including Starship via user template).
+2. **Noctalia** updates the wallpaper natively.
 
 All apps update automatically - no manual template substitution needed.
 
@@ -243,14 +215,7 @@ After creating/editing, run: `systemctl --user daemon-reload && systemctl --user
 
 Noctalia provides the lock screen with PAM authentication.
 
-**Auto-lock**: `~/.config/swayidle/config`
-```
-timeout 120 'qs -c noctalia-shell --lock'
-timeout 600 'niri msg action power-off-monitors'
-before-sleep 'qs -c noctalia-shell --lock'
-```
-
-**Toggle script**: `~/.config/swayidle/toggle.sh` (MOD+Ctrl+I)
+**Auto-lock**: Handled natively by Noctalia v5's built-in idle management (replacing swayidle).
 
 ### Fingerprint Auth (fprintd)
 
@@ -260,21 +225,42 @@ before-sleep 'qs -c noctalia-shell --lock'
 - **greetd login**: Password only (unlocks gnome-keyring properly)
 - **Noctalia lock screen**: Fingerprint OR password (keyring already unlocked from login)
 
+### Account Lockout (pam_faillock)
+
+Incorrect password attempts trigger a temporary lockout via `pam_faillock.so` (configured in `/etc/security/faillock.conf`).
+- **Limit**: Currently set to 5 attempts.
+- **Duration**: 10 minutes (600 seconds).
+- **Reset**: Run `sudo faillock --user aps --reset`. Alternatively, since records are stored in temporary RAM (`/var/run/faillock`), simply **rebooting the system** instantly clears the lockout.
+
 ### Polkit Agent
 
 **Agent**: `/usr/lib/polkit-kde-authentication-agent-1`
 - Started automatically with Niri
 - Provides authentication dialogs for privileged operations
 
-## Login Manager (greetd + tuigreet)
+## Login Manager (greetd + noctalia-greeter)
 
-Uses greetd with tuigreet in a minimal sway session.
+Uses greetd with noctalia-greeter to match the Noctalia shell UI.
 
 **Config files**:
-- `/etc/greetd/config.toml` - Main greetd config
-- `/etc/greetd/sway-config` - Sway session for greeter
+- `/etc/greetd/config.toml` - Main greetd config (launches `/usr/bin/noctalia-greeter-session`)
+- `/var/lib/noctalia-greeter/greeter.toml` - Greeter settings (default session/user)
+- `/var/lib/noctalia-greeter/sync.toml` - Auto-synced appearance settings
 
-Features: remembers last user/session, shows asterisks for password, displays time, launches niri-session.
+**Features**: matches Noctalia color scheme and wallpaper, remembers last user/session, supports session selection.
+
+**Syncing appearance**:
+Run **Settings → Security → Noctalia Greeter → Sync Now** from the Noctalia shell to sync wallpaper and colors.
+If on seatd without logind, run: `pkexec noctalia-greeter-apply-appearance "$XDG_RUNTIME_DIR/noctalia-greeter-sync"` in a terminal after staging.
+
+**Display Scaling & Multiple Monitors**:
+If the greeter looks excessively large/pixelated natively on high-DPI screens, wlroots is likely applying `scale = 2.0` automatically.
+To force `scale = 1.0` while keeping multiple monitors active (and avoiding TOML parse errors), use global output settings with a combined layout string in `/var/lib/noctalia-greeter/greeter.toml`:
+```toml
+[output]
+layout = "eDP-1:0,0; HDMI-A-1:1920,0"
+scale = 1.0
+```
 
 ## Clipboard
 
@@ -304,7 +290,6 @@ Edit `~/.config/niri/cfg/layout.kdl`
 
 - **Niri**: Changes auto-reload
 - **Noctalia**: Changes apply immediately via IPC
-- **Walker**: `pkill walker && walker --gapplication-service &`
 
 ### Add custom widget to Noctalia bar
 
@@ -331,7 +316,6 @@ These files are managed automatically - edit their sources instead:
 |----------------|----------------|
 | `ghostty/config` | Noctalia template in `settings.json` |
 | `alacritty/themes/noctalia.toml` | Noctalia |
-| `walker/themes/noctalia/style.css` | Noctalia |
 | `gtk-3.0/noctalia.css` | Noctalia |
 | `gtk-4.0/noctalia.css` | Noctalia |
 | `starship.toml` | Noctalia user template |

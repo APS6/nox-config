@@ -1,13 +1,13 @@
-@define-color surface #232a2e;
-@define-color surfaceVariant #2d353b;
+@define-color surface #282a36;
+@define-color surfaceVariant #44475a;
 
-@define-color onSurface #859289;
-@define-color onSurfaceVariant #d3c6aa;
+@define-color onSurface #f8f8f2;
+@define-color onSurfaceVariant #d6d8e0;
 
-@define-color primary #a7c080;
-@define-color secondary #d3c6aa;
-@define-color error #e67e80;
-@define-color outline #7a8478;
+@define-color primary #bd93f9;
+@define-color secondary #ff79c6;
+@define-color error #ff5555;
+@define-color outline #6d728b;
 
 * {
   all: unset;

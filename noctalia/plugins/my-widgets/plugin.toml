@@ -1,0 +1,8 @@
+name = "My Widgets"
+version = "1.0.0"
+author = "aps"
+
+[entries.stats]
+type = "widget"
+main = "widget.luau"
+default_alignment = "center"

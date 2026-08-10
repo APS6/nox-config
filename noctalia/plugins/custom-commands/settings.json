@@ -1,0 +1,14 @@
+{
+  "commands": [
+    {
+      "name": "mount sftp domenico",
+      "command": "mount-domenico.sh",
+      "icon": "terminal-2"
+    },
+    {
+      "name": "Magic trick",
+      "command": "magic",
+      "icon": "terminal-2"
+    }
+  ]
+}

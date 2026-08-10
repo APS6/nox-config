@@ -1,0 +1,13 @@
+name = "Custom Widgets"
+id = "aps/custom-widgets"
+plugin_api = 10
+version = "1.0.0"
+author = "aps"
+
+[[widget]]
+id = "stats"
+entry = "stats.luau"
+
+[[widget]]
+id = "tunnel"
+entry = "tunnel.luau"

@@ -6,3 +6,8 @@
 # [templates.starship]
 # input_path = "~/.config/noctalia/templates/starship.toml"
 # output_path = "~/.config/starship.toml"
+
+
+[templates.greeter]
+input_path = "~/.config/noctalia/templates/greeter-appearance.toml"
+output_path = "~/.config/noctalia/greeter-colors.toml"

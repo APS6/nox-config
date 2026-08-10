@@ -1,0 +1,19 @@
+[theme]
+builtin = "Dracula"
+mode = "dark"
+
+[shell]
+avatar_path = "/home/aps/Pictures/face-rounded.png"
+time_format = "%I:%M %p"
+date_format = "%a, %b %d"
+
+[shell.launcher]
+show_icons = true
+categories = true
+
+[shell.animation]
+speed = 1.0
+
+[shell.screenshot]
+save_to_file = true
+copy_to_clipboard = true
