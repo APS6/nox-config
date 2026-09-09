@@ -45,3 +45,11 @@
 
 !satty
 !satty/config.toml
+
+!bin/
+!bin/**
+bin/*.mp4
+bin/uv
+bin/uvx
+bin/puter-stats*
+

@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+KEY_FILE="$HOME/.config/laptop-backup/secret.key"
+REMOTE_HOST="aps6@domenico"
+REMOTE_FILE="/home/aps6/laptop-backup/laptop-envs.tar.gz.enc"
+TARGET_DIR="$HOME/code"
+
+mkdir -p "$TARGET_DIR"
+
+if [ -f "$KEY_FILE" ]; then
+  KEY="$(cat "$KEY_FILE")"
+else
+  read -rsp "Enter Laptop Env Encryption Key: " KEY
+  echo
+fi
+
+echo "=== [$(date '+%Y-%m-%d %H:%M:%S')] Restoring Encrypted .env Files ==="
+
+echo "[*] Fetching ciphertext from $REMOTE_HOST and decrypting into $TARGET_DIR..."
+ssh "$REMOTE_HOST" "cat '$REMOTE_FILE'" \
+  | openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -pass "pass:$KEY" \
+  | tar -xzvf - -C "$TARGET_DIR"
+
+echo "[+] Successfully restored all .env files into $TARGET_DIR!"
+echo "=== [$(date '+%Y-%m-%d %H:%M:%S')] Done! ==="

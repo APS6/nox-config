@@ -1,0 +1,3 @@
+#!/bin/sh
+# Stop the cloudflared service
+sudo systemctl stop cloudflared

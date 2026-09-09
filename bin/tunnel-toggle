@@ -1,0 +1,7 @@
+#!/bin/bash
+status=$(systemctl is-active cloudflared)
+if [ "$status" = "active" ]; then
+    alacritty --class alacritty-float -e bash -lc "sudo systemctl stop cloudflared"
+else
+    alacritty --class alacritty-float -e bash -lc "sudo systemctl start cloudflared"
+fi

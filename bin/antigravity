@@ -1,0 +1,89 @@
+#!/bin/bash
+TARGET_BIN="$HOME/Applications/Antigravity/Antigravity-x64/antigravity"
+
+stop_antigravity() {
+    local pids
+    pids=$(pgrep -f "Applications/Antigravity" 2>/dev/null)
+    if [ -z "$pids" ]; then
+        echo "Antigravity is not running."
+        return 0
+    fi
+
+    echo -n "Stopping Antigravity..."
+    pkill -15 -f "Applications/Antigravity" 2>/dev/null
+
+    for i in {1..30}; do
+        if ! pgrep -f "Applications/Antigravity" >/dev/null 2>&1; then
+            echo " stopped cleanly."
+            return 0
+        fi
+        sleep 0.1
+    done
+
+    # Force kill any lingering child processes (zygotes, language_server)
+    echo -n " force killing lingering processes..."
+    pkill -9 -f "Applications/Antigravity" 2>/dev/null
+
+    for i in {1..20}; do
+        if ! pgrep -f "Applications/Antigravity" >/dev/null 2>&1; then
+            echo " stopped."
+            return 0
+        fi
+        sleep 0.1
+    done
+
+    echo " Warning: some processes could not be stopped."
+    return 1
+}
+
+start_antigravity() {
+    if pgrep -f "Applications/Antigravity.*antigravity" >/dev/null 2>&1; then
+        local pid
+        pid=$(pgrep -f "Applications/Antigravity.*antigravity" | head -n 1)
+        echo "Antigravity is already running (PID: $pid)."
+        echo "Use 'antigravity restart' to restart, or 'antigravity stop' to stop."
+        return 0
+    fi
+
+    export DISPLAY=${DISPLAY:-:0}
+    export WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-wayland-1}
+    export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/run/user/$(id -u)}
+    export DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS:-unix:path=/run/user/$(id -u)/bus}
+    if [ -z "$XAUTHORITY" ]; then
+        export XAUTHORITY=$(ps e -u $(whoami) 2>/dev/null | grep -o "XAUTHORITY=[^ ]*" | head -n 1 | cut -d= -f2)
+    fi
+
+    mkdir -p "$HOME/.config/Antigravity/logs"
+    nohup "$TARGET_BIN" "$@" > "$HOME/.config/Antigravity/logs/launch.log" 2>&1 &
+    local pid=$!
+    disown "$pid" 2>/dev/null
+    echo "Antigravity launched in background (PID: $pid). Safe to disconnect."
+}
+
+case "$1" in
+    stop|kill)
+        stop_antigravity
+        ;;
+    status)
+        pids=$(pgrep -f "Applications/Antigravity.*(antigravity|language_server)" 2>/dev/null)
+        if [ -n "$pids" ]; then
+            count=$(echo "$pids" | wc -l)
+            main_pid=$(echo "$pids" | head -n 1)
+            echo "Antigravity is RUNNING (Main PID: $main_pid, Total procs: $count)"
+        else
+            echo "Antigravity is STOPPED."
+        fi
+        ;;
+    restart)
+        stop_antigravity
+        sleep 0.5
+        shift
+        start_antigravity "$@"
+        ;;
+    logs)
+        tail -n 25 "$HOME/.config/Antigravity/logs/launch.log" 2>/dev/null || echo "No logs found."
+        ;;
+    *)
+        start_antigravity "$@"
+        ;;
+esac

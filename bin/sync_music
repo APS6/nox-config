@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SERVER="aps6@domenico"
+
+echo "────────────────────────────────────────"
+echo "  Triggering Music Sync on domenico...  "
+echo "────────────────────────────────────────"
+
+ssh "$SERVER" "systemctl --user start music-sync.service --no-block"
+
+echo "[✓] Job started on domenico."
+echo "[+] Streaming live logs (Ctrl+C anytime to detach):"
+echo ""
+
+ssh -t "$SERVER" "journalctl --user -u music-sync.service -f -n 20"

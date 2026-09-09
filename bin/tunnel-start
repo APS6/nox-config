@@ -1,0 +1,3 @@
+#!/bin/sh
+# Start the cloudflared service
+sudo systemctl start cloudflared

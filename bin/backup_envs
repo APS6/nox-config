@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+KEY_FILE="$HOME/.config/laptop-backup/secret.key"
+REMOTE_HOST="aps6@domenico"
+REMOTE_DIR="/home/aps6/laptop-backup"
+SOURCE_DIR="$HOME/code"
+
+if [ ! -f "$KEY_FILE" ]; then
+  echo "[!] Key file not found: $KEY_FILE" >&2
+  exit 1
+fi
+
+KEY="$(cat "$KEY_FILE")"
+
+if [ ! -d "$SOURCE_DIR" ]; then
+  echo "[!] Source directory not found: $SOURCE_DIR" >&2
+  exit 1
+fi
+
+echo "=== [$(date '+%Y-%m-%d %H:%M:%S')] Starting Encrypted .env Backup ==="
+
+FILE_COUNT=$(cd "$SOURCE_DIR" && find . -type f \( -name ".env" -o -name ".env.*" \) ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/venv/*" | wc -l)
+echo "[*] Found $FILE_COUNT environment files in $SOURCE_DIR"
+
+if [ "$FILE_COUNT" -eq 0 ]; then
+  echo "[*] No .env files to backup. Exiting."
+  exit 0
+fi
+
+echo "[*] Encrypting client-side (AES-256-CBC, PBKDF2 600k rounds)..."
+echo "[*] Streaming ciphertext over SSH to $REMOTE_HOST:$REMOTE_DIR/laptop-envs.tar.gz.enc..."
+
+cd "$SOURCE_DIR"
+find . -type f \( -name ".env" -o -name ".env.*" \) ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/venv/*" -print0 \
+  | tar --null -czf - --files-from - \
+  | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -pass "pass:$KEY" \
+  | ssh "$REMOTE_HOST" "mkdir -p '$REMOTE_DIR' && chmod 700 '$REMOTE_DIR' && cat > '$REMOTE_DIR/laptop-envs.tar.gz.enc' && chmod 600 '$REMOTE_DIR/laptop-envs.tar.gz.enc'"
+
+echo "[+] Successfully pushed encrypted payload (ciphertext only) to domenico!"
+echo "=== [$(date '+%Y-%m-%d %H:%M:%S')] Backup Completed! ==="

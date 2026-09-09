@@ -1,0 +1,36 @@
+#!/bin/bash
+
+pgrep -f "alacritty --class Screensaver" && exit 0
+
+focused=$(niri msg -j outputs | jq -r '.[] | select(.focused == true).name')
+monitors=($(niri msg -j outputs | jq -r '.[] | .name'))
+
+# If we have at least 2 monitors, use first for cava and second for music
+if [ ${#monitors[@]} -ge 2 ]; then
+  # Launch cava on first monitor
+  niri msg action focus-monitor-left
+  niri msg action spawn -- \
+    alacritty --class Screensaver \
+    --config-file ~/.local/share/omarchy/default/alacritty/screensaver.toml \
+    -e ~/.local/bin/party-cmd
+
+  # Launch music on second monitor and trigger fullscreen
+  niri msg action focus-monitor-right
+  uwsm app -- brave --new-window --autoplay-policy=no-user-gesture-required --app="https://music.youtube.com/watch?v=LLbew85exp0&list=PLHjy6CIX42Hf59e73tSMNCANkvwmn93Bi&shuffle=1" &
+
+  # Wait for the browser window to open and load, then send 'f' to trigger fullscreen
+  sleep 1.5
+  niri msg action focus-monitor-right
+  sleep 0.5
+  wtype -s 100 -k f
+else
+  # Fallback: launch on all monitors if less than 2
+  for m in "${monitors[@]}"; do
+    niri msg action spawn -- \
+      alacritty --class Screensaver \
+      --config-file ~/.local/share/omarchy/default/alacritty/screensaver.toml \
+      -e ~/.local/bin/party-cmd
+  done
+
+  uwsm app -- brave --new-window --autoplay-policy=no-user-gesture-required --app="https://music.youtube.com/watch?v=LLbew85exp0&list=PLHjy6CIX42Hf59e73tSMNCANkvwmn93Bi&shuffle=1"
+fi

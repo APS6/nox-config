@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Cleanup function
+cleanup() {
+  pkill -f "alacritty --class Screensaver" 2>/dev/null
+  exit 0
+}
+
+# Trap signals for cleanup
+trap cleanup INT TERM
+
+# Just run cava directly with party config - it will take over the terminal
+cava -p ~/.config/cava/party.conf
