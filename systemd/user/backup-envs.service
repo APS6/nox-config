@@ -1,0 +1,10 @@
+[Unit]
+Description=Client-Side Encrypted .env Backup to Domenico
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/aps/.local/bin/backup_envs
+StandardOutput=journal
+StandardError=journal

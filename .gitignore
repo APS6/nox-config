@@ -53,3 +53,10 @@ bin/uv
 bin/uvx
 bin/puter-stats*
 
+!systemd/
+!systemd/user/
+!systemd/user/backup-envs.service
+!systemd/user/backup-envs.timer
+!systemd/user/noctalia.service.d/
+!systemd/user/noctalia.service.d/pam.conf
+
