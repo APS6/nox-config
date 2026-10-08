@@ -1,0 +1,8 @@
+NEXT                        LEFT LAST                            PASSED UNIT                         ACTIVATES
+Thu 2026-10-08 14:08:41 IST  41s Thu 2026-10-08 14:07:41 IST    18s ago agy-battery-monitor.timer    agy-battery-monitor.service
+Fri 2026-10-09 03:01:51 IST  12h Thu 2026-10-08 03:01:41 IST    11h ago backup.timer                 backup.service
+Fri 2026-10-09 04:00:54 IST  13h Thu 2026-10-08 04:04:06 IST    10h ago music-sync.timer             music-sync.service
+Fri 2026-10-09 07:36:41 IST  17h Thu 2026-10-08 07:36:41 IST     6h ago systemd-tmpfiles-clean.timer systemd-tmpfiles-clean.service
+-                              - Sat 2026-10-03 07:32:21 IST 5 days ago grub-boot-success.timer      grub-boot-success.service
+
+5 timers listed.

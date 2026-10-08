@@ -1,0 +1,1 @@
+QTreeView::item:alternate { background-color: #313131; } QTableView::item:alternate { background-color: #313131; }
