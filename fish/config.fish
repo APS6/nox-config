@@ -14,3 +14,9 @@ mise activate fish | source
 set -gx PATH $PATH /home/aps/.lmstudio/bin
 # End of LM Studio CLI section
 
+
+
+# Added by Antigravity CLI installer
+set -gx PATH "/home/aps/.local/bin" $PATH
+
+# Qt Theme Integration

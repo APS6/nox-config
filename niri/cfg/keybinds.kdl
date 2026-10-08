@@ -18,6 +18,8 @@ binds {
     MOD+SLASH                           hotkey-overlay-title="Open Bitwarden" { spawn "bitwarden-desktop"; }
     MOD+CTRL+I                          hotkey-overlay-title="Toggle Auto-lock" { spawn "noctalia" "msg" "caffeine-toggle"; }
 
+    MOD+V                               hotkey-overlay-title="Voice Dictation" { spawn "voice-dictate"; }
+
     MOD+E                             hotkey-overlay-title="File Manager: Nautilus" { spawn-sh "nautilus"; }
 
     // ─── Audio Controls ───
@@ -120,7 +122,7 @@ binds {
     MOD+SHIFT+EQUAL                     { set-window-height "+10%"; }
 
     // ─── Modes ───
-    MOD+V                               { toggle-window-floating; }
+    MOD+ALT+V                           hotkey-overlay-title="Toggle Floating Window" { toggle-window-floating; }
     MOD+SHIFT+F                               { fullscreen-window; }
     MOD+Q                               { toggle-column-tabbed-display; }
     MOD+SHIFT+SPACE                     allow-when-locked=true { spawn-sh "noctalia msg bar-toggle"; }
