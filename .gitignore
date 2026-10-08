@@ -33,6 +33,8 @@
 !Kvantum/**
 !qt5ct/
 !qt5ct/**
+!qt6ct/
+!qt6ct/**
 !themes/
 !themes/**
 
@@ -60,3 +62,5 @@ bin/puter-stats*
 !systemd/user/noctalia.service.d/
 !systemd/user/noctalia.service.d/pam.conf
 
+!packages.txt
+!domenico_packages.txt
