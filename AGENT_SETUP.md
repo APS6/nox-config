@@ -46,7 +46,7 @@ Before an agent can reconstruct the setup, the user must provide:
 1. **Network Quirks**: Read the "CRITICAL QUIRKS" section in the `domenico-infrastructure` skill. 
    - You MUST disable IPv6 on the outgoing interface via `sysctl` (`net.ipv6.conf.<interface>.disable_ipv6 = 1`) to fix Docker MTU blackholes.
 2. **SELinux**: Ensure SELinux remains enforcing. All Docker bind mounts must use `:z` or `:Z`.
-3. **Firewall**: `firewalld` and `UFW` are currently **inactive**. Do not enforce UFW rules unless instructed otherwise, as it relies on Tailscale and Docker's iptables for routing.
+3. **Firewall**: `ufw` must be **ACTIVE** and set to `default deny incoming`. Explicitly allow `22/tcp` (SSH) and `in on tailscale0` (Tailscale). Restart Docker immediately after enabling UFW.
 
 ### B. Users & Permissions
 1. Recreate the `sftpuser` (UID 1001) and `sftpuser-private` (UID 1002) exactly.
