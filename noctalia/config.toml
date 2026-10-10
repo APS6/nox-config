@@ -2,6 +2,9 @@
 builtin = "Dracula"
 mode = "dark"
 
+[audio]
+enable_sounds = false
+
 [shell]
 avatar_path = "/home/aps/Pictures/face-rounded.png"
 time_format = "%I:%M %p"
