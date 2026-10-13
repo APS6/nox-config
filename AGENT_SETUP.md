@@ -38,6 +38,22 @@ Before an agent can reconstruct the setup, the user must provide:
 4. Enable the `backup-envs.timer` systemd user service.
 5. If you need to restore current `.env` files from the server, run `restore_envs`.
 
+### E. AI Coding Assistant Setup (Antigravity & Cursor)
+1. Clone `agent-skills` into `~/.agents`.
+2. Symlink skills for Antigravity:
+   ```bash
+   mkdir -p ~/.gemini/config
+   ln -sfn ~/.agents/skills ~/.gemini/config/skills
+   ```
+3. Symlink plugins for Antigravity and Cursor:
+   ```bash
+   mkdir -p ~/.gemini/config/plugins ~/.cursor/plugins/local
+   ln -sfn ~/.agents/plugins/pstack ~/.gemini/config/plugins/pstack
+   ln -sfn ~/.agents/plugins/cursor-team-kit ~/.gemini/config/plugins/cursor-team-kit
+   ln -sfn ~/.agents/plugins/pstack ~/.cursor/plugins/local/pstack
+   ln -sfn ~/.agents/plugins/cursor-team-kit ~/.cursor/plugins/local/cursor-team-kit
+   ```
+
 ---
 
 ## 🖥️ 2. Server Reconstruction (Domenico - Fedora)
