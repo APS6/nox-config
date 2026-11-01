@@ -18,7 +18,7 @@ binds {
     MOD+SLASH                           hotkey-overlay-title="Open Bitwarden" { spawn "bitwarden-desktop"; }
     MOD+CTRL+I                          hotkey-overlay-title="Toggle Auto-lock" { spawn "noctalia" "msg" "caffeine-toggle"; }
 
-    MOD+V                               hotkey-overlay-title="Voice Dictation" { spawn "voice-dictate"; }
+    MOD+V                               hotkey-overlay-title="Toggle Floating Window" { toggle-window-floating; }
 
     MOD+E                             hotkey-overlay-title="File Manager: Nautilus" { spawn-sh "nautilus"; }
 
@@ -122,7 +122,6 @@ binds {
     MOD+SHIFT+EQUAL                     { set-window-height "+10%"; }
 
     // ─── Modes ───
-    MOD+ALT+V                           hotkey-overlay-title="Toggle Floating Window" { toggle-window-floating; }
     MOD+SHIFT+F                               { fullscreen-window; }
     MOD+Q                               { toggle-column-tabbed-display; }
     MOD+SHIFT+SPACE                     allow-when-locked=true { spawn-sh "noctalia msg bar-toggle"; }
@@ -149,4 +148,10 @@ binds {
     CTRL+ALT+DELETE                     { quit; } // Also quits Niri
     MOD+SHIFT+P                         { power-off-monitors; } // Turn off screens (useful for OLED or privacy)
     MOD+O                               repeat=false { toggle-overview; }
+
+    // ─── Hex Voice Dictation ───
+    Alt+V                               hotkey-overlay-title="Hex Voice Dictation" { spawn-sh "~/.config/niri/scripts/hex-dictate.sh"; }
+    Ctrl+Alt+V                          hotkey-overlay-title="Hex Paste Last Dictation" { spawn "hex" "paste-last"; }
+    Alt+Escape                          hotkey-overlay-title="Hex Cancel Dictation" { spawn-sh "~/.config/niri/scripts/hex-dictate.sh cancel"; }
+    F9                                  hotkey-overlay-title="Hex Annotate Screen" { spawn-sh "~/.config/niri/scripts/hex-annotate.sh"; }
 }
