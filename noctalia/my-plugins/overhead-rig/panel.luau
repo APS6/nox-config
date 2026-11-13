@@ -268,19 +268,8 @@ local function renderUI()
       }),
     }),
 
-    -- Row 4: Snap Photo & Physical Torch
+    -- Row 4: Physical Torch & Audio Reset
     ui.row({ gap = 6, align = "center" }, {
-      compactCard({
-        glyph = "aperture",
-        iconColor = "#94e2d5",
-        title = "Snap Photo",
-        subtitle = "To ~/Pictures/Camera",
-        onClick = function()
-          noctalia.runAsync("/home/aps/.local/bin/phone-rig photo", function()
-            refreshStatus()
-          end)
-        end,
-      }),
       compactCard({
         glyph = "sun",
         iconColor = state.torch and "#f9e2af" or "#a6adc8",
@@ -295,21 +284,6 @@ local function renderUI()
           end)
         end,
       }),
-    }),
-
-    -- Row 5: Scan Notebook Page & Audio Restore
-    ui.row({ gap = 6, align = "center" }, {
-      compactCard({
-        glyph = "file-text",
-        iconColor = "#a6e3a1",
-        title = "Scan Notebook",
-        subtitle = "Auto-crop & PDF",
-        onClick = function()
-          noctalia.runAsync("/home/aps/.local/bin/phone-rig scan", function()
-            refreshStatus()
-          end)
-        end,
-      }),
       compactCard({
         glyph = "headphones",
         iconColor = "#a6adc8",
@@ -317,6 +291,21 @@ local function renderUI()
         subtitle = "A2DP AAC & Hex",
         onClick = function()
           noctalia.runAsync("/home/aps/.local/bin/phone-rig fix-audio", function()
+            refreshStatus()
+          end)
+        end,
+      }),
+    }),
+
+    -- Row 5: Scan Notebook Document (Lesser used, clean full-width utility)
+    ui.row({ align = "center" }, {
+      compactCard({
+        glyph = "file-text",
+        iconColor = "#a6e3a1",
+        title = "Scan Notebook Page",
+        subtitle = "Auto-crop bounds & multi-page PDF",
+        onClick = function()
+          noctalia.runAsync("/home/aps/.local/bin/phone-rig scan", function()
             refreshStatus()
           end)
         end,
