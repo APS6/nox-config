@@ -7,3 +7,6 @@ include "./cfg/rules.kdl"
 include "./cfg/misc.kdl"
 
 include "./noctalia.kdl"
+
+// Superwhisper's dictation shortcuts. Change them in Superwhisper's settings.
+include optional=true "superwhisper.kdl" // superwhisper: managed shortcuts

@@ -151,7 +151,13 @@ binds {
 
     // ─── Hex Voice Dictation ───
     Alt+V                               hotkey-overlay-title="Hex Voice Dictation" { spawn-sh "~/.config/niri/scripts/hex-dictate.sh"; }
+    Caps_Lock                           hotkey-overlay-title="Hex Voice Dictation" { spawn-sh "~/.config/niri/scripts/hex-dictate.sh"; }
+    MouseMiddle                         hotkey-overlay-title="Hex Voice Dictation" { spawn-sh "~/.config/niri/scripts/hex-dictate.sh"; }
     Ctrl+Alt+V                          hotkey-overlay-title="Hex Paste Last Dictation" { spawn "hex" "paste-last"; }
-    Alt+Escape                          hotkey-overlay-title="Hex Cancel Dictation" { spawn-sh "~/.config/niri/scripts/hex-dictate.sh cancel"; }
+    Alt+Escape                          hotkey-overlay-title="Cancel Voice Dictation" { spawn-sh "~/.config/niri/scripts/hex-dictate.sh cancel"; }
     F9                                  hotkey-overlay-title="Hex Annotate Screen" { spawn-sh "~/.config/niri/scripts/hex-annotate.sh"; }
+
+    // ─── Superwhisper Voice Dictation ───
+    Alt+Space                           hotkey-overlay-title="Superwhisper Voice Dictation" { spawn-sh "~/.config/niri/scripts/superwhisper-dictate.sh"; }
+    Ctrl+Alt+Space                      hotkey-overlay-title="Superwhisper Paste Last Dictation" { spawn-sh "~/.config/niri/scripts/superwhisper-dictate.sh paste-last"; }
 }

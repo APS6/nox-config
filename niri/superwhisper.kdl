@@ -1,0 +1,6 @@
+// Written by Superwhisper whenever its shortcuts change; edits here are replaced.
+// Change the keys in Superwhisper's settings. niri's config.kdl includes this file.
+binds {
+    Alt+space repeat=false hotkey-overlay-title="Superwhisper: start or stop dictation" { spawn "/home/aps/.local/bin/superwhisper" "niri-key" "toggle"; }
+    Shift+Escape repeat=false hotkey-overlay-title="Superwhisper: cancel dictation" { spawn "/home/aps/.local/bin/superwhisper" "niri-key" "cancel"; }
+}

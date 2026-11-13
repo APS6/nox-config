@@ -13,6 +13,10 @@ input {
         natural-scroll // Enable natural (macOS-style) scrolling
     }
 
+    trackpoint {
+        scroll-method "on-button-down"
+    }
+
     touch {
         map-to-output "eDP-1"
     }
