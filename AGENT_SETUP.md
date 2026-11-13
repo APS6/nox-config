@@ -53,6 +53,25 @@ Before an agent can reconstruct the setup, the user must provide:
    ln -sfn ~/.agents/plugins/pstack ~/.cursor/plugins/local/pstack
    ln -sfn ~/.agents/plugins/cursor-team-kit ~/.cursor/plugins/local/cursor-team-kit
    ```
+4. If using the alternate Antigravity profile (`~/.ag_alt_home` / `nox-alt`):
+   ```bash
+   mkdir -p ~/.ag_alt_home/.gemini/config/plugins
+   ln -sfn ~/.agents/skills ~/.ag_alt_home/.gemini/config/skills
+   ln -sfn ~/.agents/plugins/pstack ~/.ag_alt_home/.gemini/config/plugins/pstack
+   ln -sfn ~/.agents/plugins/cursor-team-kit ~/.ag_alt_home/.gemini/config/plugins/cursor-team-kit
+   ```
+
+### F. Overhead Desk Rig & Noctalia Plugin
+1. Install system tools: `pacman -S scrcpy android-tools`
+2. Ensure v4l2loopback is configured for virtual webcam:
+   ```bash
+   sudo modprobe v4l2loopback devices=1 video_nr=9 card_label="Overhead Desk Cam" exclusive_caps=1
+   ```
+3. Scripts are located in `~/.local/bin/`:
+   - `phone-rig` (backend orchestrator)
+   - `phone-scanner-hud` (PyGObject GTK3 scanner HUD)
+4. Noctalia plugin is installed at `~/.config/noctalia/my-plugins/overhead-rig/`.
+5. Niri floating window rules are configured in `~/.config/niri/cfg/rules.kdl`.
 
 ---
 
