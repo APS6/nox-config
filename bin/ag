@@ -83,6 +83,10 @@ case "$1" in
     logs)
         tail -n 25 "$HOME/.config/Antigravity/logs/launch.log" 2>/dev/null || echo "No logs found."
         ;;
+    sync-server|update-server)
+        shift
+        exec "$HOME/.local/bin/ag-server-update" "$@"
+        ;;
     *)
         start_antigravity "$@"
         ;;
