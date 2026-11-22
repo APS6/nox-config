@@ -24,10 +24,9 @@ local function render(output)
   end
 
   local isConnected = data.connected == true
+  local adbState = tostring(data.adb_state or (isConnected and "connected" or "disconnected"))
   local glyphName = "device-mobile"
   local glyphColor = "#a6e3a1" -- Green
-  local activeDotColor = nil
-  local activeBadgeText = nil
   local statusDesc = "Idle"
 
   local activeFeatures = {}
@@ -42,9 +41,19 @@ local function render(output)
   local activeBadgeText = nil
 
   if not isConnected then
-    glyphColor = "#6c7086"
-    statusDesc = "Disconnected"
-    table.insert(activeDots, "#f38ba8") -- Red alert dot
+    if adbState == "unauthorized" then
+      glyphColor = "#f9e2af" -- Yellow warning
+      statusDesc = "USB Unauthorized"
+      table.insert(activeDots, "#f9e2af")
+    elseif adbState == "offline" then
+      glyphColor = "#fab387" -- Peach warning
+      statusDesc = "Offline"
+      table.insert(activeDots, "#fab387")
+    else
+      glyphColor = "#6c7086"
+      statusDesc = "Disconnected"
+      table.insert(activeDots, "#f38ba8") -- Red alert dot
+    end
   elseif #activeFeatures > 0 then
     statusDesc = table.concat(activeFeatures, " • ")
     if data.recording then
@@ -78,9 +87,11 @@ local function render(output)
     }),
   }
 
-  if isConnected and data.battery and data.battery ~= "N/A" then
+  local battStr = tostring(data.battery or "")
+  local hasValidBattery = string.match(battStr, "^%d+%%$") ~= nil
+  if isConnected and hasValidBattery then
     table.insert(children, ui.label({
-      text = tostring(data.battery),
+      text = battStr,
       fontSize = 11,
       fontWeight = "bold",
       color = data.charging and "#a6e3a1" or "#cdd6f4",
@@ -120,9 +131,17 @@ local function render(output)
   local container = barWidget.isVertical() and ui.column or ui.row
   barWidget.render(container({ gap = 5, align = "center" }, children))
 
-  local tooltipText = isConnected
-    and ("Overhead Phone: " .. tostring(data.battery) .. " (" .. tostring(data.connection) .. ") • " .. statusDesc)
-    or "Overhead Phone: Offline • Click to connect"
+  local tooltipText
+  if isConnected then
+    local battDisplay = hasValidBattery and battStr or "N/A"
+    tooltipText = "Overhead Phone: " .. battDisplay .. " (" .. tostring(data.connection) .. ") • " .. statusDesc
+  elseif adbState == "unauthorized" then
+    tooltipText = "Overhead Phone: USB Unauthorized • Unlock phone & tap Allow"
+  elseif adbState == "offline" then
+    tooltipText = "Overhead Phone: Offline • Replug USB or click to reconnect"
+  else
+    tooltipText = "Overhead Phone: Offline • Click to connect"
+  end
   barWidget.setTooltip(tooltipText)
 end
 

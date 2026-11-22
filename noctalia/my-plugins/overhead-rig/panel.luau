@@ -2,6 +2,7 @@
 
 local state = {
   connected = false,
+  adb_state = "disconnected",
   connection = "None",
   battery = "N/A",
   battery_status = "Unknown",
@@ -61,6 +62,12 @@ local function renderUI()
   local statusColor = "#a6adc8"
   local statusIcon = "check"
 
+  local adbState = tostring(state.adb_state or (state.connected and "connected" or "disconnected"))
+  local isUnauth = (not state.connected) and (adbState == "unauthorized")
+  local battStr = tostring(state.battery or "N/A")
+  local hasValidBatt = string.match(battStr, "^%d+%%$") ~= nil
+  local battDisplay = hasValidBatt and (battStr .. " (" .. tostring(state.battery_status or "Unknown") .. ")") or "Battery: N/A"
+
   if state.recording then
     statusBadge = "Recording"
     statusColor = "#f38ba8"
@@ -81,10 +88,27 @@ local function renderUI()
     statusBadge = "Phone Mic"
     statusColor = "#fab387"
     statusIcon = "microphone"
+  elseif isUnauth then
+    statusBadge = "Unauthorized"
+    statusColor = "#f9e2af"
+    statusIcon = "alert-triangle"
   elseif not state.connected then
     statusBadge = "Disconnected"
     statusColor = "#f38ba8"
     statusIcon = "alert-triangle"
+  end
+
+  local connSubtext = "Offline / Not Detected"
+  local connColor = "#f38ba8"
+  if state.connected then
+    connSubtext = "Connected via " .. tostring(state.connection)
+    connColor = "#a6e3a1"
+  elseif isUnauth then
+    connSubtext = "USB Unauthorized — Tap Allow on phone"
+    connColor = "#f9e2af"
+  elseif adbState == "offline" then
+    connSubtext = "ADB Offline — Replug USB or Connect"
+    connColor = "#fab387"
   end
 
   local children = {}
@@ -103,14 +127,14 @@ local function renderUI()
         ui.glyph({
           name = "device-mobile",
           size = 18,
-          color = state.connected and "#a6e3a1" or "#f38ba8",
+          color = connColor,
         }),
         ui.column({ gap = 1 }, {
           ui.label({ text = "Overhead Desk Phone", fontSize = 13, fontWeight = "bold", color = "#cdd6f4" }),
           ui.label({
-            text = state.connected and ("Connected via " .. state.connection) or "Offline / Not Detected",
+            text = connSubtext,
             fontSize = 10,
-            color = state.connected and "#a6e3a1" or "#f38ba8",
+            color = connColor,
           }),
         }),
       }),
@@ -130,13 +154,13 @@ local function renderUI()
         ui.glyph({
           name = state.charging and "battery-charging" or "battery",
           size = 14,
-          color = battColor,
+          color = hasValidBatt and battColor or "#6c7086",
         }),
         ui.label({
-          text = state.battery .. " (" .. state.battery_status .. ")",
+          text = battDisplay,
           fontSize = 10.5,
           fontWeight = "medium",
-          color = battColor,
+          color = hasValidBatt and battColor or "#6c7086",
         }),
       }),
       ui.row({ align = "center", gap = 5 }, {
@@ -146,24 +170,33 @@ local function renderUI()
     }),
   }))
 
-  -- 2. Disconnected Alert & Quick Connect Button (when not connected)
+  -- 2. Disconnected / Unauthorized Alert & Quick Connect Button (when not connected)
   if not state.connected then
     table.insert(children, ui.row({
       padding = 8,
       gap = 8,
       radius = 8,
-      fill = "#2a1e24",
-      border = "#f38ba8",
+      fill = isUnauth and "#2e281d" or "#2a1e24",
+      border = isUnauth and "#f9e2af" or "#f38ba8",
       borderWidth = 1,
       align = "center",
       justify = "space_between",
     }, {
       ui.column({ gap = 1, flexGrow = 1 }, {
-        ui.label({ text = "Phone Not Connected", fontSize = 11, fontWeight = "bold", color = "#f38ba8" }),
-        ui.label({ text = "Check USB cable or Wi-Fi (192.168.1.8)", fontSize = 9.5, color = "#a6adc8" }),
+        ui.label({
+          text = isUnauth and "USB Debugging Unauthorized" or "Phone Not Connected",
+          fontSize = 11,
+          fontWeight = "bold",
+          color = isUnauth and "#f9e2af" or "#f38ba8",
+        }),
+        ui.label({
+          text = isUnauth and "Unlock phone & tap 'Allow' on RSA popup" or "Check USB cable or Wi-Fi (192.168.1.8)",
+          fontSize = 9.5,
+          color = "#a6adc8",
+        }),
       }),
       ui.button({
-        text = "⚡ Connect",
+        text = isUnauth and "Retry" or "Connect",
         variant = "primary",
         controlSize = "sm",
         onClick = function()
